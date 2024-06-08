@@ -12,15 +12,15 @@ import {
   import { addresses } from "../../Assets/Data/UserData";
   import { useNavigation } from "@react-navigation/native";
   
-  export default function CheckOut({ overAllCost }) {
+  export default function CheckOut() {
     const navigation = useNavigation();
   
     const [showModal, setShowModal] = useState(false);
     const [showModal2, setShowModal2] = useState(false);
     const [showModal3, setShowModal3] = useState(false);
   
-    const deliverCharges = (overAllCost * 0.1) / 100;
-    const total = overAllCost + deliverCharges - 200;
+    const deliverCharges = (200 * 0.1) / 100;
+    const total = 200 + deliverCharges - 200;
   
     return (
       <Center px={5}>
@@ -45,7 +45,7 @@ import {
               <VStack space={3}>
                 <HStack alignItems="center" justifyContent="space-between">
                   <Text fontWeight="medium">Sub Total</Text>
-                  <Text color="black">₹{overAllCost}</Text>
+                  <Text color="black">₹200</Text>
                 </HStack>
                 <HStack alignItems="center" justifyContent="space-between">
                   <Text fontWeight="medium">Delivery Charges</Text>

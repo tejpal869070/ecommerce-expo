@@ -12,8 +12,9 @@ import HomeProducts from "../../Componentes/Home/HomeProducts";
 import Trendings from "../Products/Trendings";
 import MensSection from "../Products/MensSection";
 import { GetAllProducts } from "../../Controller/Product/ProductController";
-import mensBanner from "../../Assets/Images/trendy-mens.jpeg"
-import womensBanner from "../../Assets/Images/trending-women.jpeg"
+import mensBanner from "../../Assets/Images/trendy-mens.jpeg";
+import womensBanner from "../../Assets/Images/trending-women.jpeg";
+import { useFocusEffect } from "@react-navigation/native";
 
 const sliderImages = [banner1, banner2];
 
@@ -49,9 +50,11 @@ export default function HomeScreen() {
     );
   };
 
-  useEffect(() => {
-    getProducts();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getProducts();
+    }, [])
+  );
 
   return (
     <Box flex={1}>
@@ -67,8 +70,12 @@ export default function HomeScreen() {
         <ImageSlider images={sliderImages} />
         <Categories />
         <Trendings />
-        {mensProduct && <MensSection products={mensProduct} banner={mensBanner} />}
-        {womensProducts && <MensSection products={womensProducts} banner={womensBanner} />}
+        {mensProduct && (
+          <MensSection products={mensProduct} banner={mensBanner} />
+        )}
+        {womensProducts && (
+          <MensSection products={womensProducts} banner={womensBanner} />
+        )}
 
         {/* <HomeProducts/> */}
       </ScrollView>

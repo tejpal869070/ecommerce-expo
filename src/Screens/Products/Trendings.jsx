@@ -4,6 +4,7 @@ import { GetAllProducts } from "../../Controller/Product/ProductController";
 import { Colors } from "../../color";
 import ProductCard from "../../Componentes/Home/ProductCard";
 import img2 from "../../Assets/Images/trending-text.jpeg";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Trendings() {
   const [products, setProducts] = useState([]);
@@ -21,9 +22,11 @@ export default function Trendings() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    getHomeProducts();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getHomeProducts();
+    }, [])
+  );
 
   return (
     <Center flex={1} w="full">

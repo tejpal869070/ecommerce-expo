@@ -1,212 +1,272 @@
 import {
-    Box,
-    Button,
-    Center,
-    FormControl,
-    HStack,
-    Heading,
-    Image,
-    Pressable,
-    Select,
-    VStack,
-  } from "native-base";
-  import React, { useState } from "react";
-  import { Modal, ScrollView,   } from "react-native";
-  import { Colors } from "../../color";
-  import { api } from "../../Config/api";
-  import { AntDesign } from "@expo/vector-icons";
-  import InputSpinner from "react-native-input-spinner";
-  
-  export default function SelectVarients({ visible, onClose, productData }) {
-   
-    const[selectedSizeQty, setSelectedSizeQty] = useState(0)
-   
-  
-    const [selectedColorIndex, setSelectedColorIndex] = useState(0);
-    const handlePress = (index) => {
-      setSelectedColorIndex((prevIndex) => (prevIndex === index ? null : index));
-    };
-  
-    const sizes = productData.colorDetails[selectedColorIndex].sizeDetails.map((obj) => obj.size);
-    const sizesAvailable = productData.colorDetails[selectedColorIndex].sizeDetails.map(
-      (obj) => obj.quantity
+  Box,
+  Button,
+  Center,
+  FormControl,
+  HStack,
+  Heading,
+  Image,
+  Pressable,
+  Select,
+  Text,
+  VStack,
+  useToast,
+} from "native-base";
+import React, { useEffect, useState } from "react";
+import { Modal, ScrollView } from "react-native";
+import { Colors } from "../../color";
+import { api } from "../../Config/api";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import InputSpinner from "react-native-input-spinner";
+import { AddtoCart } from "../../Controller/User/UserController";
+
+export default function SelectVarients({ visible, onClose, productData }) {
+  console.log(productData);
+  const toast = useToast();
+  const [formError, setFormError] = useState(false);
+  const [added, setAdded] = useState(false);
+  const [selectedSizeQty, setSelectedSizeQty] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [price, setPrice] = useState(
+    productData.colorDetails[0].sizeDetails[0].regular_price
+  );
+  const [selectedColor, setSelectedcolor] = useState(
+    productData.colorDetails[0].color
+  );
+  const [selectedSize, setSelectedSize] = useState();
+
+  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
+  const handlePress = (index) => {
+    setSelectedColorIndex((prevIndex) => (prevIndex === index ? null : index));
+    setSelectedcolor(productData.colorDetails[index].color);
+  };
+
+  const sizes = productData.colorDetails[selectedColorIndex].sizeDetails.map(
+    (obj) => obj.size
+  );
+  const sizesAvailable = productData.colorDetails[
+    selectedColorIndex
+  ].sizeDetails.map((obj) => obj.quantity);
+
+  const handleSizeChange = (selectedSizeIndex, itemIndex) => {
+    console.log(selectedSizeIndex);
+    setSelectedSizeQty(sizes.indexOf(selectedSizeIndex));
+    setSelectedSize(selectedSizeIndex);
+    setPrice(
+      productData.colorDetails[selectedColorIndex].sizeDetails[
+        sizes.indexOf(selectedSizeIndex)
+      ].regular_price
     );
-  
-    const handleSizeChange=(selectedSizeIndex)=>{
-      setSelectedSizeQty(sizes.indexOf(selectedSizeIndex))
+  };
+
+  const formData = {
+    product_id: productData.id,
+    color: selectedColor,
+    size: selectedSize,
+  };
+
+  const handleCart = async () => {
+    if (formData.size === undefined) {
+      setFormError(true);
+      return;
     }
-   
-  
-  
-    const handleBuy = () => {};
-  
-    return (
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={visible}
-        onRequestClose={onClose}
+    setFormError(false);
+    try {
+      const response = await AddtoCart(formData);
+      console.log(response);
+      if (response.status) {
+        toast.closeAll();
+        setAdded(true);
+        toast.show({ title: "Added", placement: "top" });
+      }
+    } catch (error) {
+      console.log("eror", error);
+    }
+  };
+
+  // useEffect(() => {
+  //   if (added) {
+  //     setTimeout(() => {
+  //       setAdded(false);
+  //     }, 1000);
+  //   }
+  // }, [added]);
+
+  return (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <Box
+        flex={1}
+        justifyContent="flex-end"
+        alignItems="flex-start"
+        bg={Colors.whiteTrans}
       >
         <Box
-          flex={1}
-          justifyContent="flex-end"
-          alignItems="flex-start"
-          bg={Colors.whiteTrans}
+          bg={Colors.white}
+          p={4}
+          roundedTop={30}
+          flexDirection="column"
+          w="100%"
+          h="60%"
+          textAlign="center"
         >
-          <Box
-            bg={Colors.white}
-            p={4}
-            roundedTop={30}
-            flexDirection="column"
-            w="100%"
-            h="60%"
-            textAlign="center"
-          >
-            <VStack>
+          <VStack>
+            <Heading
+              fontSize={18}
+              fontWeight="semibold"
+              color={Colors.lightBlack}
+            >
+              Select Color
+            </Heading>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              <HStack py={1.5} space={2}>
+                {productData &&
+                  productData.colorDetails.map((i, index) => (
+                    <Pressable
+                      key={index}
+                      borderWidth={selectedColorIndex === index ? 4 : 0}
+                      rounded={selectedColorIndex === index ? 8 : 0}
+                      onPress={() => handlePress(index)}
+                    >
+                      <Center>
+                        <Image
+                          alt="imgs"
+                          w={20}
+                          h={20}
+                          resizeMode="contain"
+                          source={{
+                            uri: `${api.API_URL}assets/img/${i.image_url[0].url}`,
+                          }}
+                        />
+                      </Center>
+                    </Pressable>
+                  ))}
+              </HStack>
+            </ScrollView>
+          </VStack>
+          <HStack>
+            <VStack mt={4} w="45%">
+              <Heading
+                fontSize={18}
+                fontWeight="semibold"
+                color={formError ? Colors.red : Colors.lightBlack}
+              >
+                Select Size
+              </Heading>
+              <FormControl w="3/4" maxW="300">
+                <Select
+                  width={100}
+                  accessibilityLabel="Choose Service"
+                  borderColor={formError ? Colors.red : Colors.lightBlack}
+                  onValueChange={(itemValue, itemIndex) =>
+                    handleSizeChange(itemValue, itemIndex)
+                  }
+                  placeholder="Sizes"
+                  _selectedItem={{
+                    bg: "teal.600",
+                    endIcon: (
+                      <AntDesign name="checkcircleo" size={24} color="black" />
+                    ),
+                  }}
+                  mt="1"
+                >
+                  {sizes.map((i, index) => (
+                    <Select.Item
+                      label={`${i} ${
+                        sizesAvailable[index] === 1
+                          ? "Out of Stock"
+                          : "     In Stock " + sizesAvailable[index]
+                      }`}
+                      value={i}
+                      key={index}
+                      style={{
+                        color:
+                          sizesAvailable[index] === 1
+                            ? Colors.red
+                            : Colors.black,
+                      }}
+                      disabled={sizesAvailable[index] === 1}
+                    />
+                  ))}
+                </Select>
+              </FormControl>
+            </VStack>
+            <VStack mt={4} w="45%">
               <Heading
                 fontSize={18}
                 fontWeight="semibold"
                 color={Colors.lightBlack}
+                mb={1}
               >
-                Select Color
+                Quantity
               </Heading>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-              >
-                <HStack py={1.5} space={2}>
-                  {productData &&
-                    productData.colorDetails.map((i, index) => (
-                      <Pressable
-                        key={index}
-                        borderWidth={selectedColorIndex === index ? 4 : 0}
-                        rounded={selectedColorIndex === index ? 8 : 0}
-                        onPress={() => handlePress(index)}
-                      >
-                        <Center>
-                          <Image
-                            alt="imgs"
-                            w={20}
-                            h={20}
-                            resizeMode="contain"
-                            source={{
-                              uri: `${api.API_URL}assets/img/${i.image_url[0].url}`,
-                            }}
-                          />
-                        </Center>
-                      </Pressable>
-                    ))}
-                </HStack>
-              </ScrollView>
+              <InputSpinner
+                max={sizesAvailable[selectedSizeQty]}
+                min={1}
+                step={1}
+                height={40}
+                onChange={(num) => setQuantity(num)}
+                initialValue={1}
+                width={150}
+                buttonFontSize={19}
+                colorMax={"#f04048"}
+                colorMin={"#40c5f4"}
+                skin="round"
+              />
             </VStack>
-            <HStack>
-              <VStack mt={4} w="45%">
-                <Heading
-                  fontSize={18}
-                  fontWeight="semibold"
-                  color={Colors.lightBlack}
-                >
-                  Select Size
-                </Heading>
-                <FormControl w="3/4" maxW="300">
-                  <Select
-                    width={100}
-                    accessibilityLabel="Choose Service"
-                    onValueChange={(itemValue, itemIndex) => handleSizeChange(itemValue)}
-                    placeholder="Sizes"
-                    _selectedItem={{
-                      bg: "teal.600",
-                      endIcon: (
-                        <AntDesign name="checkcircleo" size={24} color="black" />
-                      ),
-                    }}
-                    mt="1"
-                  >
-                    {sizes.map((i, index) => (
-                      <Select.Item
-                        label={`${i} ${
-                          sizesAvailable[index] === 1
-                            ? "Out of Stock"
-                            : "     In Stock " + sizesAvailable[index]
-                        }`}
-                        value={i}
-                        key={index}
-                        
-                        style={{
-                          color:
-                            sizesAvailable[index] === 1
-                              ? Colors.red
-                              : Colors.black,
-                        }}
-                        disabled={sizesAvailable[index] === 1}
-                      />
-                    ))}
-                  </Select>
-                </FormControl>
-              </VStack>
-              <VStack mt={4}  w="45%">
-                <Heading
-                  fontSize={18}
-                  fontWeight="semibold"
-                  color={Colors.lightBlack}
-                  mb={1}
-                >
-                  Quantity
-                </Heading>
-                <InputSpinner
-                    max={sizesAvailable[selectedSizeQty]}
-                    min={1}
-                    step={1}
-                    height={40}
-                    
-                    initialValue={1}
-                    width={150}
-                    buttonFontSize={19}
-                    colorMax={"#f04048"}
-                    colorMin={"#40c5f4"}
-                    skin="round"
-                  //   onChange={_.debounce((num) => {
-                  //     const updatedPrices = [...prices];
-                  //     updatedPrices[index] = num * ElectronicsData[index].price;
-                  //     setPrice(updatedPrices);
-                  //     totalCost(updatedPrices.reduce((i1,i2)=>i1+i2,0))
-                  //   },500)}
-                  />
-              </VStack>
-            </HStack>
-  
-            <HStack justifyContent="space-between">
-              <Button
-                w="50%"
-                rounded={0}
-                bg={Colors.skyblue}
-                mt={6}
-                _text={{ fontSize: "18px", fontWeight: "bold" }}
-                borderLeftRadius={18}
-                shadow={4}
-              >
-                Add to cart
-              </Button>
-              <Button
-                w="50%"
-                rounded={0}
-                bg={Colors.main}
-                mt={6}
-                _text={{ fontSize: "18px", fontWeight: "bold" }}
-                borderRightRadius={18}
-                shadow={4}
-                onPress={() => handleBuy()}
-              >
-                Buy
-              </Button>
-            </HStack>
-  
-            <Button mt={10} w={20} rounded="full" onPress={() => onClose()}>
-              Close
+          </HStack>
+
+          <HStack space={2} mt={2}>
+            <Text bold fontSize={18} color={Colors.green}>
+              ₹{price}
+            </Text>
+          </HStack>
+
+          <HStack justifyContent="space-between" mt={4}>
+            <Button
+              w="50%"
+              rounded={0}
+              bg={Colors.skyblue}
+              _text={{ fontSize: "18px", fontWeight: "bold" }}
+              borderLeftRadius={18}
+              shadow={4}
+              onPress={() => handleCart()}
+            >
+              {added ? (
+                <HStack space={1} alignItems="center">
+                  <Text fontSize="17px" bold>
+                    Added
+                  </Text>
+                  <MaterialIcons name="verified" size={16} color="black" />
+                </HStack>
+              ) : (
+                "Add to Cart"
+              )}
             </Button>
-          </Box>
+            <Button
+              w="50%"
+              rounded={0}
+              bg={Colors.main}
+              _text={{ fontSize: "18px", fontWeight: "bold" }}
+              borderRightRadius={18}
+              shadow={4}
+            >
+              Buy
+            </Button>
+          </HStack>
+
+          <Button mt={10} w={20} rounded="full" onPress={() => onClose()}>
+            Close
+          </Button>
         </Box>
-      </Modal>
-    );
-  }
-  
+      </Box>
+    </Modal>
+  );
+}

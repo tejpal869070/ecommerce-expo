@@ -19,16 +19,19 @@ import { GetProductCategories } from "../../Controller/Product/ProductController
 import { useFocusEffect } from "@react-navigation/native";
 
 export default function CategoryProductSelect() {
-  const [selectIndex, setIndex] = useState(0);
+  const [selectIndex, setSelectIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
- 
+  const [selectedCategory, setSelectedCategory] = useState();
+  const [catId, setCatId] = useState();
 
   const getCategoriesData = async () => {
     try {
       const response = await GetProductCategories();
       if (response.status === true) {
         setCategoryData(response.data);
+        setSelectedCategory(response.data[0].name);
+        setCatId(response.data[0].id)
         setLoading(false);
       }
     } catch (error) {
@@ -52,24 +55,33 @@ export default function CategoryProductSelect() {
     >
       <StatusBar style="dark" hidden={false} />
       <Box w="24%" bg={Colors.lightGreen} shadow={4}>
-        <ScrollView showsVerticalScrollIndicator={false} h="full" py={12}>
+        <ScrollView showsVerticalScrollIndicator={false} h="full" pt={12}>
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
                 <Skeleton
                   key={index}
-                  w="90%"
+                  w="100%"
                   h="90px"
                   borderRadius="5"
                   mb={2}
                 />
               ))
             : categoryData.map((i, index) => (
-                <Pressable key={index} onPress={() => setIndex(index)}>
+                <Pressable
+                  key={index}
+                  onPress={() => {
+                    setSelectedCategory(i.name);
+                    setSelectIndex(index);
+                    setCatId(i.id);
+                  }}
+                >
                   <Center
                     py={1.5}
                     style={{
                       backgroundColor:
-                        index === selectIndex ? Colors.white : Colors.lightGreen,
+                        index === selectIndex
+                          ? Colors.white
+                          : Colors.lightGreen,
                       borderTopLeftRadius: index === selectIndex ? 16 : 0,
                       borderBottomLeftRadius: index === selectIndex ? 16 : 0,
                       borderTopWidth: index === selectIndex ? 0.5 : 0,
@@ -99,10 +111,14 @@ export default function CategoryProductSelect() {
                   </Center>
                 </Pressable>
               ))}
+          <Box h={20} />
         </ScrollView>
       </Box>
       <Box w="73%">
-        <CategoryProductSelect2 selectIndex={selectIndex} />
+        <CategoryProductSelect2
+          selectedCategory={selectedCategory}
+          cat_id={catId}
+        />
       </Box>
     </Flex>
   );

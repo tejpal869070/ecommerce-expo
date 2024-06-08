@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import { Colors } from "../../color";
 import { GetProductCategories } from "../../Controller/Product/ProductController";
 import { api } from "../../Config/api";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Categories() {
   const [loading, setLoading] = useState(true);
@@ -30,9 +31,11 @@ export default function Categories() {
     }
   };
 
-  useEffect(() => {
-    getCategoriesData();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getCategoriesData();
+    }, [])
+  );
 
   return (
     <Box>
@@ -55,7 +58,7 @@ export default function Categories() {
                       w="60px"
                       bg={Colors.skyBlueLight}
                       rounded="full"
-                      overflow="hidden" 
+                      overflow="hidden"
                     >
                       <Image
                         alt="img"
@@ -67,7 +70,15 @@ export default function Categories() {
                         resizeMode="contain"
                       />
                     </Center>
-                    <Text shadow={1} bg={Colors.skyBlueLight} mt={-2} rounded={4} fontSize="12px" bold textAlign="center">
+                    <Text
+                      shadow={1}
+                      bg={Colors.skyBlueLight}
+                      mt={-2}
+                      rounded={4}
+                      fontSize="12px"
+                      bold
+                      textAlign="center"
+                    >
                       {i.name}
                     </Text>
                   </VStack>

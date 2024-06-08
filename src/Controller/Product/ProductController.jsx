@@ -20,14 +20,38 @@ export const GetAllProducts = async () => {
   }
 };
 
-
 export const GetProductById = async (itemId) => {
-    try {
-      const response = await axios.post(`${api.API_URL}user/get-product-id`, {
-        id : itemId,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
+  try {
+    const response = await axios.post(`${api.API_URL}user/get-product-id`, {
+      id: itemId,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const GetSubCategory = async () => {
+  try {
+    const response = await axios.post(`${api.API_URL}user/get-sub-category`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const GetSubCategoryProducts = async (formData) => { 
+  try {
+    const postData = {
+      cat_id: formData.cat_id,
+      sub_cat_id: formData.sub_cat_id,
+    };
+    const response = await axios.post(
+      `${api.API_URL}user/get-sub-category-product`,
+      postData
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

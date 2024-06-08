@@ -13,6 +13,7 @@ import { Colors } from "../color";
 import ProfileScreen from "../Screens/User/ProfileScreen";
 import CartScreen from "../Screens/Cart/CartScreen";
 import CategoryProductSelect from "../Screens/Home/CategoryProductSelect";
+import CategoryNav from "./CategoryNav";
 
 const Tab = createBottomTabNavigator();
 
@@ -42,8 +43,8 @@ export default function BottomNav() {
       />
 
       <Tab.Screen
-        name="Categories"
-        component={CategoryProductSelect}
+        name="Categoriesnav"
+        component={CategoryNav}
         options={{
           tabBarIcon: ({ focused }) => (
             <View alignItems="center">

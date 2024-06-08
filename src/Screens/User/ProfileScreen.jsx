@@ -43,7 +43,6 @@ export default function ProfileScreen() {
     const response = await GetUserDetails();
     if (response.data.length < 1) {
       alert("Something went wrong.");
-      setIsUser(false);
       setUserData({});
     } else {
       setUserData(response.data[0]);
@@ -143,7 +142,7 @@ export default function ProfileScreen() {
         {isUser ? (
           <VStack space={2.5}>
             <ChangePassword />
-            <ShowAddress />
+            <ShowAddress userData={userData} />
           </VStack>
         ) : (
           ""

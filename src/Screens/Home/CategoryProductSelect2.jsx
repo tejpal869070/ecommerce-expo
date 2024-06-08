@@ -7,17 +7,41 @@ import {
   ScrollView,
   Text,
 } from "native-base";
-import React from "react";
+import React, { useState } from "react";
 import { Colors } from "../../color";
-import { CategorySubCategoryProducts } from "../../Assets/Data/Categories";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { View } from "react-native";
+import { GetSubCategory } from "../../Controller/Product/ProductController";
+import { api } from "../../Config/api";
 
-export default function CategoryProductSelect2({ selectIndex }) {
+export default function CategoryProductSelect2({ selectedCategory, cat_id }) {
   const navigation = useNavigation();
+  const [subCategory, setSubCategory] = useState([]);
+
+  const getSubCat = async () => {
+    try {
+      const response = await GetSubCategory();
+      if (response.status) {
+        setSubCategory(
+          response.data.filter((item) => item.cat_name == selectedCategory)
+        );
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getSubCat();
+    }, [selectedCategory])
+  );
+
   return (
     <View>
-      <Text py={3} borderBottomWidth={1} bold fontSize={18}>{(CategorySubCategoryProducts[selectIndex].cat_name).toUpperCase()}</Text>
+      <Text py={3} borderBottomWidth={1} bold fontSize={18}>
+        {selectedCategory}
+      </Text>
       <ScrollView h="full" py={6} px={3}>
         <Flex
           flex={1}
@@ -27,41 +51,44 @@ export default function CategoryProductSelect2({ selectIndex }) {
           py={2}
           justifyContent="space-between"
         >
-          {CategorySubCategoryProducts[selectIndex].sub_cat_details.map(
-            (i, index) => (
-              <Pressable
-                key={index}
-                onPress={() => navigation.navigate("SubCategoryProducts")}
+          {subCategory.map((i, index) => (
+            <Pressable
+              key={index}
+              onPress={() =>
+                navigation.navigate("Products", {
+                  sub_cat_id: i.id,
+                  cat_id : cat_id,
+                })
+              }
+            >
+              <Center
+                mb={6}
+                shadow={4}
+                w={24}
+                h={24}
+                rounded="full"
+                bg={Colors.lightGreen}
               >
-                <Center
-                  mb={6}
-                  shadow={4}
-                  w={24}
-                  h={24}
-                  rounded="full"
-                  bg={Colors.lightGreen}
+                <Image
+                  alt="img"
+                  source={{ uri: `${api.API_URL}assets/img/${i.image_url}` }}
+                  w={16}
+                  h={16}
+                  resizeMode="contain"
+                />
+                <Text
+                  bg={Colors.skyBlueLight}
+                  px={2.5}
+                  rounded={4}
+                  fontWeight="semibold"
                 >
-                  <Image
-                    alt="img"
-                    source={i.subcat_img}
-                    w={16}
-                    h={16}
-                    resizeMode="contain"
-                  />
-                  <Text
-                    bg={Colors.skyBlueLight}
-                    px={2.5}
-                    rounded={4}
-                    fontWeight="semibold"
-                  >
-                    {i.subcat_name}
-                  </Text>
-                </Center>
-              </Pressable>
-            )
-          )}
+                  {i.name}
+                </Text>
+              </Center>
+            </Pressable>
+          ))}
         </Flex>
-      </ScrollView> 
+      </ScrollView>
     </View>
   );
 }

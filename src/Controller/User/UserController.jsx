@@ -41,14 +41,13 @@ export const userRegistration = async (userData) => {
       mobile: userData.mobile,
       password: userData.password,
       email: userData.email,
-    }; 
-    const response = await axios.post(`${api.API_URL}user/register`, postData); 
+    };
+    const response = await axios.post(`${api.API_URL}user/register`, postData);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
 
 export const GetUserDetails = async () => {
   try {
@@ -77,7 +76,6 @@ export const GetUserDetails = async () => {
     throw error;
   }
 };
-
 
 export const CheckToken = async () => {
   const token = await SecureStore.getItemAsync("token");
@@ -116,7 +114,6 @@ export const CheckToken = async () => {
   }
 };
 
-
 export const ChangeUserPassword = async (formData) => {
   try {
     const email = await SecureStore.getItemAsync("email");
@@ -143,4 +140,91 @@ export const ChangeUserPassword = async (formData) => {
   } catch (error) {
     throw error;
   }
+};
+
+export const AddtoCart = async (formData) => {
+  const email = await SecureStore.getItemAsync("email");
+  if (!email) {
+    return { status: false };
+  }
+  const postData = {
+    email: email,
+    product_id: formData.product_id,
+    size: formData.size,
+    color: formData.color,
+  };
+  try {
+    const response = await axios.post(`${api.API_URL}user/add-cart`, postData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const CartData = async () => {
+  const email = await SecureStore.getItemAsync("email");
+  const postData = {
+    email: email,
+  };
+  if (!email) {
+    return { status: false };
+  }
+  try {
+    const response = await axios.post(`${api.API_URL}user/get-cart`, postData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const CartRemove = async (id) => {
+  const email = await SecureStore.getItemAsync("email");
+  if (!email) {
+    return { status: false };
+  }
+  const postData = {
+    email: email,
+    id: id,
+  };
+  try {
+    const response = await axios.post(
+      `${api.API_URL}user/remove-cart`,
+      postData
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const UpdateUserDetails = async (formData) => {
+  const email = await SecureStore.getItemAsync("email");
+  try {
+    const postData = {
+      email: email,
+      address: { ...formData },
+    };
+    const response = await axios.post(
+      `${api.API_URL}user/update-user-details`,
+      postData
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const RemoveAddress = async (formData) => {
+  const email = await SecureStore.getItemAsync("email");
+  try {
+    const postData = {
+      email: email,
+      id: formData.id,
+    };
+    const response = await axios.post(
+      `${api.API_URL}user/remove-address`,
+      postData
+    );
+    return response.data;
+  } catch (error) {}
 };
