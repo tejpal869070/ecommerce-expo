@@ -1,6 +1,5 @@
 import {
-  Box,
-  Center,
+  Box, 
   HStack,
   Image,
   ScrollView,
@@ -13,6 +12,7 @@ import { Feather, AntDesign } from "@expo/vector-icons";
 import { Modal, Pressable } from "react-native";
 import { OrdersData } from "../../Assets/Data/UserData";
 import { useNavigation } from "@react-navigation/native"; 
+import SingleOrderDetail from "./SingleOrderDetail";
 
 export default function UserOrders() {
   const navigation = useNavigation();
@@ -102,7 +102,7 @@ export default function UserOrders() {
       </Modal>
 
       {/*single order model */}
-      {/* <SingleOrderDetail isVisible={isVisible} openModel2={openModal2} /> */}
+       <SingleOrderDetail isVisible={isVisible} openModel2={openModal2} /> 
     </Box>
   );
 }

@@ -85,7 +85,7 @@ export default function CartScreen() {
           </Center>
 
           {/*Check out button */}
-          <CheckOut />
+          <CheckOut totalPrice={totalPrice}  />
 
           <Box py={6}></Box>
         </ScrollView>

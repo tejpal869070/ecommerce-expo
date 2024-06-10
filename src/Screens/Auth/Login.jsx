@@ -58,11 +58,9 @@ export default function LoginScreen({ navigation }) {
         setFormError("Email or Password is wrong.");
         setLoading(false);
         return;
-      } else {
-        setFormError("Server error !");
-        setLoading(false);
-        return;
       }
+      setFormError("Server error !");
+      setLoading(false); 
     }
   };
 
@@ -148,8 +146,7 @@ export default function LoginScreen({ navigation }) {
               fontSize: "16px",
               fontWeight: "bold",
             }}
-            _pressed={{ bg: Colors.main2 }}
-            disabled={loading}
+            _pressed={{ bg: Colors.main2 }} 
           >
             {loading ? "Verifying..." : "LOGIN"}
           </Button>

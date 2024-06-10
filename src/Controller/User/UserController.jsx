@@ -214,17 +214,19 @@ export const UpdateUserDetails = async (formData) => {
   }
 };
 
-export const RemoveAddress = async (formData) => {
+export const RemoveAddress = async (id) => {
   const email = await SecureStore.getItemAsync("email");
   try {
     const postData = {
       email: email,
-      id: formData.id,
+      id: id,
     };
     const response = await axios.post(
       `${api.API_URL}user/remove-address`,
       postData
     );
     return response.data;
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 };

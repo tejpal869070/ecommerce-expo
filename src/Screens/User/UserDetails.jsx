@@ -90,24 +90,7 @@ export default function UserDetails({ userData }) {
               <Text fontSize={20} fontWeight="bold">
                 {userData.mobile}
               </Text>
-            </HStack>
-            <HStack
-              justifyContent="space-between"
-              borderBottomColor={Colors.main}
-              borderBottomWidth={1}
-              pb={2}
-            >
-              <Text
-                fontSize={18}
-                color={Colors.lightBlack}
-                fontWeight="semibold"
-              >
-                Wallet :
-              </Text>
-              <Text fontSize={20} fontWeight="bold">
-                ${userData.wallet_balance}
-              </Text>
-            </HStack>
+            </HStack> 
 
             <Button
               mt={6}

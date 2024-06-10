@@ -1,11 +1,13 @@
 import {
   Box,
   Center,
+  CheckIcon,
   Flex,
   HStack,
   Heading,
   Image,
   ScrollView,
+  Select,
   Text,
   VStack,
 } from "native-base";
@@ -27,8 +29,27 @@ export default function SubCategoryProducts() {
   const navigation = useNavigation();
   const params = useRoute();
   const { cat_id, sub_cat_id } = params.params;
-  const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
+  const [filterType, setFilterType] = useState(""); 
+
+  const handleFilter = async (itemValue) => {
+    setFilterType(itemValue);
+    let filterProducts = [...products];
+    
+    if (itemValue === "low") {
+      filterProducts.sort(
+        (a, b) => a.sizeDetails[0].regular_price - b.sizeDetails[0].regular_price
+      );
+    } else if (itemValue === "high") {
+      filterProducts.sort(
+        (a, b) => b.sizeDetails[0].regular_price - a.sizeDetails[0].regular_price
+      );
+    }
+    
+    console.log("filter", filterProducts);
+    setProducts(filterProducts);
+  };
+  
 
   const formData = {
     cat_id: cat_id,
@@ -67,6 +88,23 @@ export default function SubCategoryProducts() {
             resizeMode="contain"
           />
         </Center>
+        <Box mb={4} px={2}>
+          <Select
+            selectedValue={filterType}
+            w="50%"
+            accessibilityLabel="Choose Service"
+            placeholder="Price"
+            _selectedItem={{
+              bg: Colors.lightWhite,
+              endIcon: <CheckIcon size="5" />,
+            }}
+            mt={1}
+            onValueChange={(itemValue) => handleFilter(itemValue)}
+          >
+            <Select.Item label="Low to High" value="low" />
+            <Select.Item label="High to Low" value="high" />
+          </Select>
+        </Box>
         <Flex
           px={2}
           flexDirection="row"

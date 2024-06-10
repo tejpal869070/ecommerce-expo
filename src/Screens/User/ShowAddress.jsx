@@ -14,17 +14,21 @@ import {
 import React, { useState } from "react";
 import { Colors } from "../../color";
 import { AntDesign, FontAwesome6, Ionicons } from "@expo/vector-icons";
-import { Modal } from "react-native";
-import { UpdateUserDetails } from "../../Controller/User/UserController";
+import { Alert, Modal } from "react-native";
+import {
+  GetUserDetails,
+  RemoveAddress,
+  UpdateUserDetails,
+} from "../../Controller/User/UserController";
+import { useFocusEffect } from "@react-navigation/native";
 
-export default function ShowAddress({ userData }) {
-  console.log("user", userData);
+export default function ShowAddress() {
   const [modalVisible, setModalVisible] = useState(false);
   const [newAddressPopup, setNewPopup] = useState(false);
   const [formError, setFormError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const addresses = userData.address;
+  const [userData, setUserData] = useState();
+  const [addresses, setAddress] = useState([]);
 
   const [name, setName] = useState("");
   const [street, setStreet] = useState("");
@@ -50,6 +54,18 @@ export default function ShowAddress({ userData }) {
 
   const openAddNewPopup = () => {
     setNewPopup((previous) => !previous);
+  };
+
+  const getUserDetails = async () => {
+    const response = await GetUserDetails();
+    if (response.data.length < 1) {
+      alert("Something went wrong.");
+      setUserData({});
+    } else {
+      setUserData(response.data[0]);
+      setAddress(response.data[0].address);
+      setLoading(false);
+    }
   };
 
   const handleNewAddress = async () => {
@@ -96,8 +112,23 @@ export default function ShowAddress({ userData }) {
         setCity("");
         setState("");
         setCountry("");
-
-        openAddNewPopup();
+        Alert.alert(
+          "Success",
+          "New address added.",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "OK",
+              onPress: () => {
+                openAddNewPopup(), getUserDetails();
+              },
+            },
+          ],
+          { cancelable: false }
+        );
       }
     } catch (error) {
       console.log(error);
@@ -105,9 +136,41 @@ export default function ShowAddress({ userData }) {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const response = await RemoveAddress(id);
+      if (response.status) {
+        Alert.alert(
+          "Success",
+          "Address removed successfully.",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            { text: "OK", onPress: () => getUserDetails() },
+          ],
+          { cancelable: false }
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getUserDetails();
+    }, [])
+  );
+
   return (
     <Box>
-      <Pressable onPress={() => openModal()}>
+      <Pressable
+        onPress={() => {
+          openModal();
+        }}
+      >
         <HStack
           bg={Colors.white}
           px={3}
@@ -186,9 +249,16 @@ export default function ShowAddress({ userData }) {
                         {i.pincode}
                       </Text>
                     </VStack>
-                    <HStack w="full" >
-                      <Button>Edit</Button>
-                      <Button>Edit</Button>
+                    <HStack justifyContent="space-between" w="full" space={2} mt={-3}>
+                    <Box w={2}/>
+                      <Button
+                        py={1}
+                        _pressed={{ bg: Colors.red }}
+                        onPress={() => handleDelete(i.id)}
+                        bg={Colors.red}
+                      >
+                        Delete
+                      </Button>
                     </HStack>
                   </Box>
                 ))}

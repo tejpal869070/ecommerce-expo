@@ -19,6 +19,7 @@ import { api } from "../../Config/api";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import InputSpinner from "react-native-input-spinner";
 import { AddtoCart } from "../../Controller/User/UserController";
+import CheckOut from "../Orders/CheckOut";
 
 export default function SelectVarients({ visible, onClose, productData }) {
   console.log(productData);
@@ -84,13 +85,13 @@ export default function SelectVarients({ visible, onClose, productData }) {
     }
   };
 
-  // useEffect(() => {
-  //   if (added) {
-  //     setTimeout(() => {
-  //       setAdded(false);
-  //     }, 1000);
-  //   }
-  // }, [added]);
+  useEffect(() => {
+    if (added) {
+      setTimeout(() => {
+        setAdded(false);
+      }, 2000);
+    }
+  }, [added]);
 
   return (
     <Modal
@@ -250,16 +251,7 @@ export default function SelectVarients({ visible, onClose, productData }) {
                 "Add to Cart"
               )}
             </Button>
-            <Button
-              w="50%"
-              rounded={0}
-              bg={Colors.main}
-              _text={{ fontSize: "18px", fontWeight: "bold" }}
-              borderRightRadius={18}
-              shadow={4}
-            >
-              Buy
-            </Button>
+            <CheckOut totalPrice={200} buy={true}  />
           </HStack>
 
           <Button mt={10} w={20} rounded="full" onPress={() => onClose()}>

@@ -23,7 +23,7 @@ import {
 import ChangePassword from "./ChangePassword";
 import ShowAddress from "./ShowAddress";
 import UserDetails from "./UserDetails";
-import UserOrders from "./UserOrders";
+import UserOrders from "../Orders/UserOrders";
 import WishList from "./WishList";
 import Help from "./Help";
 
@@ -142,7 +142,7 @@ export default function ProfileScreen() {
         {isUser ? (
           <VStack space={2.5}>
             <ChangePassword />
-            <ShowAddress userData={userData} />
+            <ShowAddress  />
           </VStack>
         ) : (
           ""
