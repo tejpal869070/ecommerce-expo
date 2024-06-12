@@ -18,15 +18,18 @@ import { Colors } from "../../color";
 import { api } from "../../Config/api";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import InputSpinner from "react-native-input-spinner";
-import { AddtoCart } from "../../Controller/User/UserController";
+import { AddtoCart, CheckToken } from "../../Controller/User/UserController";
 import CheckOut from "../Orders/CheckOut";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export default function SelectVarients({ visible, onClose, productData }) {
-  console.log(productData);
+  console.log("prodData", productData);
+  const navigation = useNavigation();
   const toast = useToast();
   const [formError, setFormError] = useState(false);
   const [added, setAdded] = useState(false);
   const [selectedSizeQty, setSelectedSizeQty] = useState(0);
+  const [isUser, setIsUser] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState(
     productData.colorDetails[0].sizeDetails[0].regular_price
@@ -34,7 +37,17 @@ export default function SelectVarients({ visible, onClose, productData }) {
   const [selectedColor, setSelectedcolor] = useState(
     productData.colorDetails[0].color
   );
-  const [selectedSize, setSelectedSize] = useState();
+
+  let DefaultSelectedSize;
+
+  for (let i = 0; i < productData.colorDetails[0].sizeDetails.length; i++) {
+    const sizeDetail = productData.colorDetails[0].sizeDetails[i];
+    if (sizeDetail.quantity > 0) {
+      DefaultSelectedSize = sizeDetail.size;
+      break;
+    }
+  }
+  const [selectedSize, setSelectedSize] = useState(DefaultSelectedSize);
 
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const handlePress = (index) => {
@@ -64,6 +77,7 @@ export default function SelectVarients({ visible, onClose, productData }) {
     product_id: productData.id,
     color: selectedColor,
     size: selectedSize,
+    qty: quantity,
   };
 
   const handleCart = async () => {
@@ -92,6 +106,22 @@ export default function SelectVarients({ visible, onClose, productData }) {
       }, 2000);
     }
   }, [added]);
+
+  // check user
+  const CheckUserLogin = async () => {
+    const isLoggedIn = await CheckToken();
+    if (isLoggedIn) {
+      setIsUser(true);
+    } else {
+      setIsUser(false);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      CheckUserLogin();
+    }, [])
+  );
 
   return (
     <Modal
@@ -153,7 +183,7 @@ export default function SelectVarients({ visible, onClose, productData }) {
             </ScrollView>
           </VStack>
           <HStack>
-            <VStack mt={4} w="45%">
+            <VStack mt={4} w="50%">
               <Heading
                 fontSize={18}
                 fontWeight="semibold"
@@ -163,7 +193,10 @@ export default function SelectVarients({ visible, onClose, productData }) {
               </Heading>
               <FormControl w="3/4" maxW="300">
                 <Select
-                  width={100}
+                  width={150}
+                  h={10}
+                  rounded="full"
+                  shadow={4}
                   accessibilityLabel="Choose Service"
                   borderColor={formError ? Colors.red : Colors.lightBlack}
                   onValueChange={(itemValue, itemIndex) =>
@@ -183,7 +216,7 @@ export default function SelectVarients({ visible, onClose, productData }) {
                       label={`${i} ${
                         sizesAvailable[index] === 1
                           ? "Out of Stock"
-                          : "     In Stock " + sizesAvailable[index]
+                          : "     In Stock "
                       }`}
                       value={i}
                       key={index}
@@ -225,34 +258,48 @@ export default function SelectVarients({ visible, onClose, productData }) {
           </HStack>
 
           <HStack space={2} mt={2}>
-            <Text bold fontSize={18} color={Colors.green}>
-              ₹{price}
+            <Text bold fontSize={18} color={Colors.green} id="totalPrice">
+              ₹{price * quantity}
             </Text>
           </HStack>
 
-          <HStack justifyContent="space-between" mt={4}>
+          {isUser ? (
+            <HStack justifyContent="space-between" mt={4}>
+              <Button
+                w="50%"
+                rounded={0}
+                bg={Colors.skyblue}
+                _text={{ fontSize: "18px", fontWeight: "bold" }}
+                borderLeftRadius={18}
+                shadow={4}
+                onPress={() => handleCart()}
+              >
+                {added ? (
+                  <HStack space={1} alignItems="center">
+                    <Text fontSize="17px" bold>
+                      Added
+                    </Text>
+                    <MaterialIcons name="verified" size={16} color="black" />
+                  </HStack>
+                ) : (
+                  "Add to Cart"
+                )}
+              </Button>
+              <CheckOut
+                totalPrice={price * quantity}
+                buy={true}
+                buyData={formData}
+              />
+            </HStack>
+          ) : (
             <Button
-              w="50%"
-              rounded={0}
-              bg={Colors.skyblue}
-              _text={{ fontSize: "18px", fontWeight: "bold" }}
-              borderLeftRadius={18}
-              shadow={4}
-              onPress={() => handleCart()}
+              mt={4}
+              _text={{ fontWeight: "semibold" }}
+              onPress={() => navigation.navigate("Login")}
             >
-              {added ? (
-                <HStack space={1} alignItems="center">
-                  <Text fontSize="17px" bold>
-                    Added
-                  </Text>
-                  <MaterialIcons name="verified" size={16} color="black" />
-                </HStack>
-              ) : (
-                "Add to Cart"
-              )}
+              LOGIN TO BUY/ADD TO CART
             </Button>
-            <CheckOut totalPrice={200} buy={true}  />
-          </HStack>
+          )}
 
           <Button mt={10} w={20} rounded="full" onPress={() => onClose()}>
             Close

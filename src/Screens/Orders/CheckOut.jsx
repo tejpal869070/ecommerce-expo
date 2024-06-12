@@ -12,7 +12,7 @@ import { Colors } from "../../color";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { GetUserDetails } from "../../Controller/User/UserController";
 
-export default function CheckOut({ totalPrice, buy }) {
+export default function CheckOut({ totalPrice, buy, buyData }) {
   const navigation = useNavigation();
   const [address, setAddress] = useState([]);
 
@@ -22,7 +22,8 @@ export default function CheckOut({ totalPrice, buy }) {
 
   // amount handle
   const deliverCharges = (totalPrice * 0.1) / 100;
-  const total = totalPrice + deliverCharges - 200;
+  const discount = (totalPrice * 10) / 100;
+  const total = totalPrice + deliverCharges - discount;
 
   // user address
   const getUserDetails = async () => {
@@ -51,7 +52,9 @@ export default function CheckOut({ totalPrice, buy }) {
           _text={{ fontSize: "18px", fontWeight: "bold" }}
           borderRightRadius={18}
           shadow={4}
-          onPress={() => setShowModal(true)}
+          onPress={() => {
+            setShowModal(true), console.log(buyData);
+          }}
           mx={-5}
         >
           Buy
@@ -87,7 +90,7 @@ export default function CheckOut({ totalPrice, buy }) {
               </HStack>
               <HStack alignItems="center" justifyContent="space-between">
                 <Text fontWeight="medium">Extra Discount</Text>
-                <Text color="red.500">-₹200</Text>
+                <Text color="red.500">-₹{Math.round(discount)}</Text>
               </HStack>
               <HStack alignItems="center" justifyContent="space-between">
                 <Text fontWeight="medium" bold fontSize={18}>

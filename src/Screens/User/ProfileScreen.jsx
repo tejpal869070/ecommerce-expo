@@ -26,6 +26,8 @@ import UserDetails from "./UserDetails";
 import UserOrders from "../Orders/UserOrders";
 import WishList from "./WishList";
 import Help from "./Help";
+import { AntDesign, FontAwesome6 } from "@expo/vector-icons";
+import { Pressable } from "react-native";
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
@@ -142,11 +144,30 @@ export default function ProfileScreen() {
         {isUser ? (
           <VStack space={2.5}>
             <ChangePassword />
-            <ShowAddress  />
+            <ShowAddress />
           </VStack>
         ) : (
           ""
         )}
+
+        <Pressable onPress={()=>navigation.navigate('Terms & Conditions')}>
+          <HStack
+            bg={Colors.white}
+            px={3}
+            rounded={10}
+            justifyContent="space-between"
+            alignItems="center"
+            py={3}
+          >
+            <HStack space={1.5}>
+            <FontAwesome6 name="book" size={22} color="black" />
+              <Text fontSize={15} fontWeight="semibold">
+                Terms & Conditions
+              </Text>
+            </HStack>
+            <AntDesign name="right" size={16} color="black" />
+          </HStack>
+        </Pressable>
 
         {/*logout*/}
         {isUser ? (

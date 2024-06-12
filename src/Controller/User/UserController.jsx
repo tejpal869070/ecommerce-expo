@@ -230,3 +230,31 @@ export const RemoveAddress = async (id) => {
     throw error;
   }
 };
+
+export const GetUserOrders = async (id) => {
+  const email = await SecureStore.getItemAsync("email");
+  try {
+    const postData = {
+      email: email,
+    };
+    const response = await axios.post(`${api.API_URL}user/get-order`, postData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const PlaceOrder = async (formData) => {
+  console.log("order", formData);
+  const email = await SecureStore.getItemAsync("email");
+  try {
+    const postData = {
+      email: email,
+      items: [...formData],
+    };
+    const response = axios.post(`${api.API_URL}user/add-order`, postData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -9,11 +9,10 @@ import {
 import React from "react";
 import HomeScreen from "../Screens/Home/HomeScreen";
 import { StyleSheet, View } from "react-native";
-import { Colors } from "../color";
-import ProfileScreen from "../Screens/User/ProfileScreen";
-import CartScreen from "../Screens/Cart/CartScreen";
-import CategoryProductSelect from "../Screens/Home/CategoryProductSelect";
+import { Colors } from "../color"; 
+import CartScreen from "../Screens/Cart/CartScreen"; 
 import CategoryNav from "./CategoryNav";
+import ProfileNav from "./ProfileNav";
 
 const Tab = createBottomTabNavigator();
 
@@ -76,7 +75,7 @@ export default function BottomNav() {
 
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileNav}
         options={{
           tabBarIcon: ({ focused }) => (
             <View alignItems="center">

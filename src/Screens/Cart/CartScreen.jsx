@@ -5,13 +5,14 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import CartItem2 from "./CartItem2";
 import { StatusBar } from "expo-status-bar";
 import CheckOut from "../Orders/CheckOut";
-import { CartData } from "../../Controller/User/UserController";
+import { CartData, CheckToken } from "../../Controller/User/UserController";
 import { FontAwesome } from "@expo/vector-icons";
 
 export default function CartScreen() {
   const navigation = useNavigation();
   const [productData, setProductData] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [isUser, setIsUser] = useState(false);
 
   const handleTotalPriceChange = (price) => {
     setTotalPrice(price);
@@ -30,9 +31,20 @@ export default function CartScreen() {
     getCartData();
   };
 
+  // check user login
+  const CheckUserLogin = async () => {
+    const isLoggedIn = await CheckToken();
+    if (isLoggedIn) {
+      setIsUser(true);
+    } else {
+      setIsUser(false);
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       getCartData();
+      CheckUserLogin();
     }, [])
   );
 
@@ -85,7 +97,7 @@ export default function CartScreen() {
           </Center>
 
           {/*Check out button */}
-          <CheckOut totalPrice={totalPrice}  />
+          <CheckOut totalPrice={totalPrice} />
 
           <Box py={6}></Box>
         </ScrollView>

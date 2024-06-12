@@ -90,7 +90,7 @@ export default function UserDetails({ userData }) {
               <Text fontSize={20} fontWeight="bold">
                 {userData.mobile}
               </Text>
-            </HStack> 
+            </HStack>
 
             <Button
               mt={6}

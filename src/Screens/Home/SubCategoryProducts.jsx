@@ -30,26 +30,28 @@ export default function SubCategoryProducts() {
   const params = useRoute();
   const { cat_id, sub_cat_id } = params.params;
   const [products, setProducts] = useState([]);
-  const [filterType, setFilterType] = useState(""); 
+  const [filterType, setFilterType] = useState("");
+  console.log("PROJECT", products);
 
   const handleFilter = async (itemValue) => {
     setFilterType(itemValue);
     let filterProducts = [...products];
-    
+
     if (itemValue === "low") {
       filterProducts.sort(
-        (a, b) => a.sizeDetails[0].regular_price - b.sizeDetails[0].regular_price
+        (a, b) =>
+          a.sizeDetails[0].regular_price - b.sizeDetails[0].regular_price
       );
     } else if (itemValue === "high") {
       filterProducts.sort(
-        (a, b) => b.sizeDetails[0].regular_price - a.sizeDetails[0].regular_price
+        (a, b) =>
+          b.sizeDetails[0].regular_price - a.sizeDetails[0].regular_price
       );
     }
-    
+
     console.log("filter", filterProducts);
     setProducts(filterProducts);
   };
-  
 
   const formData = {
     cat_id: cat_id,
@@ -162,10 +164,10 @@ export default function SubCategoryProducts() {
                           mt={1}
                           color={Colors.lightBlack}
                         >
-                          ₹249
+                          ₹{i.sizeDetails[0].regular_price + 149}
                         </Heading>
                         <Heading fontSize="16px" mt={1} color={Colors.green}>
-                          ₹200
+                          ₹{i.sizeDetails[0].regular_price}
                         </Heading>
                       </HStack>
                     </HStack>
