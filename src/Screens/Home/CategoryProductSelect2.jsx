@@ -14,13 +14,15 @@ import { View } from "react-native";
 import { GetSubCategory } from "../../Controller/Product/ProductController";
 import { api } from "../../Config/api";
 
-export default function CategoryProductSelect2({ selectedCategory, cat_id }) {
+export default function CategoryProductSelect2({ selectedCategory, cat_id }) { 
   const navigation = useNavigation();
   const [subCategory, setSubCategory] = useState([]);
+ 
 
   const getSubCat = async () => {
     try {
       const response = await GetSubCategory();
+      console.log(response)
       if (response.status) {
         setSubCategory(
           response.data.filter((item) => item.cat_name == selectedCategory)

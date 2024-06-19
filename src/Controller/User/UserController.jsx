@@ -135,9 +135,10 @@ export const ChangeUserPassword = async (formData) => {
       postData,
       axiosConfig
     );
-
+    console.log(response)
     return response.data;
   } catch (error) {
+    console.log(error)
     throw error;
   }
 };

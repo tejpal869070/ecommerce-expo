@@ -23,7 +23,6 @@ import CheckOut from "../Orders/CheckOut";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export default function SelectVarients({ visible, onClose, productData }) {
-  console.log("prodData", productData);
   const navigation = useNavigation();
   const toast = useToast();
   const [formError, setFormError] = useState(false);
@@ -38,7 +37,7 @@ export default function SelectVarients({ visible, onClose, productData }) {
     productData.colorDetails[0].color
   );
 
-  let DefaultSelectedSize;
+  let DefaultSelectedSize; 
 
   for (let i = 0; i < productData.colorDetails[0].sizeDetails.length; i++) {
     const sizeDetail = productData.colorDetails[0].sizeDetails[i];

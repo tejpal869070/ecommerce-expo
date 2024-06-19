@@ -101,7 +101,7 @@ export default function Terms() {
     <Box flex={1} py={4} px={4} bg={Colors.lightGreen}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {data.map((i, index) => (
-          <Box mb={3}>
+          <Box mb={3} key={index}>
             <Text bold fontSize={17}>
               <FontAwesome name="hand-o-right" size={16} color="black" />
               {"  "}

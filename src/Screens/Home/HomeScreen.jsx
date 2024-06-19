@@ -56,7 +56,7 @@ export default function HomeScreen() {
     }, [])
   );
 
-  return (
+  return ( 
     <Box flex={1}>
       <StatusBar hidden={false} style="dark" />
       <SearchBox />

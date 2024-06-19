@@ -5,6 +5,7 @@ import {
   Image,
   Input,
   Pressable,
+  Spinner,
   Text,
   VStack,
 } from "native-base";
@@ -15,6 +16,7 @@ import { Entypo } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import * as SecureStore from "expo-secure-store";
 import { userLogin } from "../../Controller/User/UserController";
+import PageLoader from "../../Componentes/Loadings/PageLoader";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -46,26 +48,27 @@ export default function LoginScreen({ navigation }) {
     }
     setFormError("");
     try {
-      const response = await userLogin(userData);
+      const response = await userLogin(userData);  
+      
       await SecureStore.setItemAsync("token", response.token);
       await SecureStore.setItemAsync("email", response.email);
       setEmail("");
       setPassword("");
       navigation.navigate("Bottom");
       setLoading(false);
-    } catch (error) {
-      if (error.response.status === 404) {
+    } catch (error) { 
+      if (error.response && error.response.status === 404) {
         setFormError("Email or Password is wrong.");
         setLoading(false);
         return;
       }
       setFormError("Server error !");
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   return (
-    <Box flex={1} bg={Colors.main}>
+    <Box flex={1} bg={Colors.main} position="relative">
       <StatusBar style="dark" hidden={false} />
       <Image
         alt="imager"
@@ -146,12 +149,12 @@ export default function LoginScreen({ navigation }) {
               fontSize: "16px",
               fontWeight: "bold",
             }}
-            _pressed={{ bg: Colors.main2 }} 
+            _pressed={{ bg: Colors.main2 }}
           >
-            {loading ? "Verifying..." : "LOGIN"}
+            {loading ? <Spinner size="sm" /> : "LOGIN"}
           </Button>
 
-          <Pressable>
+          <Pressable onPress={() => navigation.navigate("Register")}>
             <Text textAlign="center" color={Colors.black}>
               SignUp Now!
             </Text>
