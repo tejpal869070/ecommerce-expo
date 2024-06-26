@@ -13,11 +13,12 @@ import React, { useEffect, useState } from "react";
 import { Colors } from "../../color";
 import { GetProductCategories } from "../../Controller/Product/ProductController";
 import { api } from "../../Config/api";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export default function Categories() {
   const [loading, setLoading] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
+  const navigation = useNavigation();
 
   const getCategoriesData = async () => {
     try {
@@ -51,7 +52,10 @@ export default function Categories() {
               ))
             : categoryData &&
               categoryData.map((i, index) => (
-                <Pressable key={index}>
+                <Pressable
+                  key={index}
+                  onPress={() => navigation.navigate("Categoriesnav")}
+                >
                   <VStack>
                     <Center
                       h="60px"

@@ -41,6 +41,7 @@ export const userRegistration = async (userData) => {
       mobile: userData.mobile,
       password: userData.password,
       email: userData.email,
+      token: userData.token
     };
     const response = await axios.post(`${api.API_URL}user/register`, postData);
     return response.data;
@@ -163,7 +164,7 @@ export const AddtoCart = async (formData) => {
 };
 
 export const CartData = async () => {
-  const email = await SecureStore.getItemAsync("email");
+  const email = await SecureStore.getItemAsync("email"); 
   const postData = {
     email: email,
   };
@@ -254,6 +255,39 @@ export const PlaceOrder = async (formData) => {
       items: [...formData],
     };
     const response = axios.post(`${api.API_URL}user/add-order`, postData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const OtpVerification = async (formData) => { 
+  try {
+    const postData = {
+      email: formData.email,
+      otp: formData.otp,
+    };
+
+    const response = await axios.post(
+      `${api.API_URL}user/verify-otp`,
+      postData
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const SendOtp = async (emailid) => {
+  try {
+    const email = emailid;
+    const dataToSend = {
+      email: email,
+    };
+    const response = await axios.post(`${api.API_URL}user/get-otp`, dataToSend);
     return response.data;
   } catch (error) {
     throw error;

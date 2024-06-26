@@ -57,7 +57,7 @@ export default function CartScreen() {
         </Text>
       </Center>
       {/*  <CartEmpty/> */}
-      {productData && productData.length === 0 ? (
+      {!isUser || productData.length===0 ? (
         <Center h="70%">
           <Center w={150} h={150} bg={Colors.white} rounded="full">
             <FontAwesome name="shopping-basket" size={64} color={Colors.main} />

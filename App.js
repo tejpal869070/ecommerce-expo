@@ -9,6 +9,7 @@ import OrderConfirm from "./src/Screens/Orders/OrderConfirm";
 import SingleProduct from "./src/Screens/Products/SingleProduct";
 import SearchedProducts from "./src/Screens/Products/SearchedProducts";
 import RegisterScreen from "./src/Screens/Auth/Register";
+import VerifyOtp from "./src/Screens/Auth/VerifyOtp";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ export default function App() {
           }}
         >
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="OtpVerify" component={VerifyOtp} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Bottom" component={BottomNav} />
           <Stack.Screen name="OrderConfirm" component={OrderConfirm} />

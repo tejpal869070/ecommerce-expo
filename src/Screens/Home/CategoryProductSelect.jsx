@@ -10,16 +10,16 @@ import {
   Text,
   VStack,
 } from "native-base";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Colors } from "../../color";
-import { CategorySubCategoryProducts } from "../../Assets/Data/Categories";
 import { api } from "../../Config/api";
 import CategoryProductSelect2 from "./CategoryProductSelect2";
 import { GetProductCategories } from "../../Controller/Product/ProductController";
 import { useFocusEffect } from "@react-navigation/native";
 
 export default function CategoryProductSelect() {
-  const [selectIndex, setSelectIndex] = useState(0);
+   
+  const [selectIndex, setSelectIndex] = useState(  0);
   const [loading, setLoading] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
@@ -31,7 +31,7 @@ export default function CategoryProductSelect() {
       if (response.status === true) {
         setCategoryData(response.data);
         setSelectedCategory(response.data[0].name);
-        setCatId(response.data[0].id)
+        setCatId(response.data[0].id);
         setLoading(false);
       }
     } catch (error) {

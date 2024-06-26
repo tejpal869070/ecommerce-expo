@@ -5,6 +5,7 @@ import {
   Image,
   Input,
   Pressable,
+  Spinner,
   Text,
   VStack,
 } from "native-base";
@@ -14,6 +15,7 @@ import { Entypo } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import {
   CheckUserExistance,
+  SendOtp,
   userRegistration,
 } from "../../Controller/User/UserController";
 
@@ -61,17 +63,17 @@ export default function RegisterScreen({ navigation }) {
     try {
       const checkExistance = await CheckUserExistance(userData);
       if (checkExistance.status) {
-        const registerResponse = await userRegistration(userData);
-        if (registerResponse.status === true) {
-          setFormError("Registration success. You can login !");
+        const otpSendFunction = await SendOtp(userData.email);
+        if (otpSendFunction.status) {
+          setLoading(false)
           setEmail("");
           setPassword("");
           setMobile("");
           setUsername("");
-          setLoading(false);
+          navigation.navigate("OtpVerify", { userData });
+          return;
         } else {
-          setFormError("Register Failed !");
-          setLoading(false);
+          setFormError("Otp sending failed");
         }
       } else {
         setFormError("User already exists");
@@ -197,7 +199,8 @@ export default function RegisterScreen({ navigation }) {
             onPress={handleRegister}
             disabled={loading}
           >
-            {loading ? "Loading..." : "Register"}
+            {loading ? <Spinner size="sm" color={Colors.black} /> : "Register"}
+
           </Button>
 
           <Pressable onPress={() => navigation.navigate("Login")}>

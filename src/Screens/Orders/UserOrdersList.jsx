@@ -1,7 +1,15 @@
-import { Box, HStack, Image, ScrollView, Text, VStack } from "native-base";
+import {
+  Box,
+  Center,
+  HStack,
+  Image,
+  ScrollView,
+  Text,
+  VStack,
+} from "native-base";
 import React, { useState } from "react";
 import { Colors } from "../../color";
-import { AntDesign } from "@expo/vector-icons";
+import noOrderPic from "../../Assets/Images/no-orders.webp";
 import { Pressable } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { GetUserOrders } from "../../Controller/User/UserController";
@@ -27,10 +35,16 @@ export default function UserOrdersList() {
       getUserOrders();
     }, [])
   );
+  
   return (
     <Box flex={1} bg={Colors.lightGreen}>
       <ScrollView w="full" px={1} showsVerticalScrollIndicator={false}>
-        {orders &&
+        {orders && orders.length === 0 ? (
+          <Center py={10}>
+            <Image alt="no-order" w={200} h={200} source={noOrderPic} />
+            <Text mt={10}>No Order Found. </Text>
+          </Center>
+        ) : (
           orders.map((i, index) => (
             <Pressable
               key={index}
@@ -67,7 +81,8 @@ export default function UserOrdersList() {
                 </Box>
               </HStack>
             </Pressable>
-          ))}
+          ))
+        )}
       </ScrollView>
     </Box>
   );
