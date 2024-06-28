@@ -32,7 +32,14 @@ export default function ProductDetails({ productData }) {
             ₹{productData.colorDetails[0].sizeDetails[0].regular_price}
           </Text>
         </HStack>
-        <RatingStar value={4} count={249} />
+        <RatingStar
+          value={
+            productData.rating
+              .map((item) => item.rating)
+              .reduce((acc, cur) => acc + cur, 0) / productData.rating.length
+          }
+          count={productData.rating.length}
+        />
       </HStack>
 
       <AvailableSize productData={productData} />
@@ -40,7 +47,15 @@ export default function ProductDetails({ productData }) {
 
       {/*Specifications */}
       <VStack mt={3} bg={Colors.white} mx={1} rounded={5} py={1}>
-        <Heading borderBottomWidth={0.5} py={2} bold px={3} fontSize={15} mb={2} color={Colors.green}>
+        <Heading
+          borderBottomWidth={0.5}
+          py={2}
+          bold
+          px={3}
+          fontSize={15}
+          mb={2}
+          color={Colors.green}
+        >
           DETAILS
         </Heading>
         {productData.colorDetails[0].description.split(",").map((i, index) => (

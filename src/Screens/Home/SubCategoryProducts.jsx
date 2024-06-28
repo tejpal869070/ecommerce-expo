@@ -93,7 +93,8 @@ export default function SubCategoryProducts() {
         <Box mb={4} px={2}>
           <Select
             selectedValue={filterType}
-            w="50%"
+            w="40%"
+            rounded={40}
             accessibilityLabel="Choose Service"
             placeholder="Price"
             _selectedItem={{

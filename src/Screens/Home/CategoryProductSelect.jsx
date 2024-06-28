@@ -19,7 +19,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 export default function CategoryProductSelect() {
    
-  const [selectIndex, setSelectIndex] = useState(  0);
+  const [selectIndex, setSelectIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
@@ -42,6 +42,7 @@ export default function CategoryProductSelect() {
   useFocusEffect(
     React.useCallback(() => {
       getCategoriesData();
+      setSelectIndex(0)
     }, [])
   );
 

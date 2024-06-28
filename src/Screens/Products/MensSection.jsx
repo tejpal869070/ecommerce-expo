@@ -27,12 +27,7 @@ export default function MensSection({ products, banner }) {
         resizeMode="contain"
         source={banner}
       />
-      <Flex
-        flexDirection="row"
-        flexWrap="wrap"
-        justifyContent="space-between"
-        mx={2}
-      >
+      <Flex flexDirection="row" flexWrap="wrap" style={{ gap: 6 }} mx={2}>
         {products &&
           products.slice(0, 6).map((item, index) => (
             <Pressable

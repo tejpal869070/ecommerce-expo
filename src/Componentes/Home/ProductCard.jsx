@@ -1,8 +1,6 @@
 import { Box, HStack, Heading, Image, Pressable, Text } from "native-base";
 import React from "react";
 import { Colors } from "../../color";
-import topimg from "../../Assets/Images/new-badge.png";
-import newimg from "../../Assets/Images/top.png";
 import { api } from "../../Config/api";
 import { FontAwesome } from "@expo/vector-icons";
 import { ImageBackground } from "react-native";

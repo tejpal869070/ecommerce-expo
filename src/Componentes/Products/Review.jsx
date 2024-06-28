@@ -4,14 +4,15 @@ import RatingStar from "./RatingStar";
 import { Colors } from "../../color";
 import { Reviews } from "../../Assets/Data/UserData";
 
-export default function Review() {
+export default function Review({ ratings }) {
+  console.log("ratings", ratings); 
   return (
     <Box mt={3} bg={Colors.white} py={3} mx={1} rounded={5} shadow={4}>
       <Heading bold px={3} fontSize={15} mb={2} color={Colors.green}>
         REVIEWS
       </Heading>
 
-      {Reviews.map((i, index) => (
+      {ratings.map((i, index) => (
         <HStack
           w="full"
           borderTopWidth={0.5}
@@ -22,14 +23,14 @@ export default function Review() {
           <VStack w="80%" px={2}>
             <RatingStar value={i.rating} />
             <Text color={Colors.lightBlack} fontSize={12}>
-              Review for {i.ReviewFor}
+              Review for someone
             </Text>
             <Text mt={1} fontSize={16}>
               {i.review}
             </Text>
           </VStack>
           <Center w="20%" p={1}>
-            <Image alt="review" w={20} h={20} source={i.image} />
+            <Image alt="review" w={20} h={20} source={Reviews[0].image} />
           </Center>
         </HStack>
       ))}
