@@ -21,6 +21,7 @@ import {
   UpdateUserDetails,
 } from "../../Controller/User/UserController";
 import { useFocusEffect } from "@react-navigation/native";
+import homeimg from "../../Assets/Images/adress.png";
 
 export default function ShowAddress() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -197,10 +198,8 @@ export default function ShowAddress() {
       >
         <Box flex={1} bg={Colors.lightGreen}>
           {addresses && addresses.length < 1 ? (
-            <Center h={200} w="full">
-              <Text bold fontSize={18}>
-                Add Address
-              </Text>
+            <Center pt={100} w="full">
+              <Image w={140} h={140} source={homeimg} alt="address" />
             </Center>
           ) : (
             <ScrollView py={6} px={4}>
@@ -249,8 +248,13 @@ export default function ShowAddress() {
                         {i.pincode}
                       </Text>
                     </VStack>
-                    <HStack justifyContent="space-between" w="full" space={2} mt={-3}>
-                    <Box w={2}/>
+                    <HStack
+                      justifyContent="space-between"
+                      w="full"
+                      space={2}
+                      mt={-3}
+                    >
+                      <Box w={2} />
                       <Button
                         py={1}
                         _pressed={{ bg: Colors.red }}
@@ -267,8 +271,10 @@ export default function ShowAddress() {
             </ScrollView>
           )}
           <Button
-            rounded={10}
+            rounded="full"
             py={3}
+            w="80%"
+            margin="auto"
             bg={Colors.main}
             my={4}
             borderWidth={2}

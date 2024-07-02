@@ -2,12 +2,12 @@ import {
   Box,
   Button,
   Center,
-  FormControl,
+  Flex,
   HStack,
   Heading,
   Image,
   Pressable,
-  Select,
+  Spinner,
   Text,
   VStack,
   useToast,
@@ -16,10 +16,8 @@ import React, { useEffect, useState } from "react";
 import { Modal, ScrollView } from "react-native";
 import { Colors } from "../../color";
 import { api } from "../../Config/api";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
-import InputSpinner from "react-native-input-spinner";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import { AddtoCart, CheckToken } from "../../Controller/User/UserController";
-import CheckOut from "../Orders/CheckOut";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export default function SelectVarients({ visible, onClose, productData }) {
@@ -27,9 +25,9 @@ export default function SelectVarients({ visible, onClose, productData }) {
   const toast = useToast();
   const [formError, setFormError] = useState(false);
   const [added, setAdded] = useState(false);
-  const [selectedSizeQty, setSelectedSizeQty] = useState(0);
   const [isUser, setIsUser] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [addingCart, setAddingCart] = useState(false);
   const [price, setPrice] = useState(
     productData.colorDetails[0].sizeDetails[0].regular_price
   );
@@ -37,7 +35,7 @@ export default function SelectVarients({ visible, onClose, productData }) {
     productData.colorDetails[0].color
   );
 
-  let DefaultSelectedSize; 
+  let DefaultSelectedSize;
 
   for (let i = 0; i < productData.colorDetails[0].sizeDetails.length; i++) {
     const sizeDetail = productData.colorDetails[0].sizeDetails[i];
@@ -62,8 +60,6 @@ export default function SelectVarients({ visible, onClose, productData }) {
   ].sizeDetails.map((obj) => obj.quantity);
 
   const handleSizeChange = (selectedSizeIndex, itemIndex) => {
-    console.log(selectedSizeIndex);
-    setSelectedSizeQty(sizes.indexOf(selectedSizeIndex));
     setSelectedSize(selectedSizeIndex);
     setPrice(
       productData.colorDetails[selectedColorIndex].sizeDetails[
@@ -79,15 +75,19 @@ export default function SelectVarients({ visible, onClose, productData }) {
     qty: quantity,
   };
 
+  console.log(formData);
+
   const handleCart = async () => {
+    console.log(formData);
+    setAddingCart(true);
     if (formData.size === undefined) {
       setFormError(true);
+      setAddingCart(false);
       return;
     }
     setFormError(false);
     try {
       const response = await AddtoCart(formData);
-      console.log(response);
       if (response.status) {
         toast.closeAll();
         setAdded(true);
@@ -95,6 +95,8 @@ export default function SelectVarients({ visible, onClose, productData }) {
       }
     } catch (error) {
       console.log("eror", error);
+    } finally {
+      setAddingCart(false);
     }
   };
 
@@ -141,9 +143,18 @@ export default function SelectVarients({ visible, onClose, productData }) {
           roundedTop={30}
           flexDirection="column"
           w="100%"
-          h="60%"
+          h="55%"
           textAlign="center"
         >
+          <Flex flexDirection="row" justifyContent="space-between">
+            <Text></Text>
+            <Entypo
+              name="circle-with-cross"
+              size={28}
+              color="black"
+              onPress={() => onClose()}
+            />
+          </Flex>
           <VStack>
             <Heading
               fontSize={18}
@@ -162,6 +173,9 @@ export default function SelectVarients({ visible, onClose, productData }) {
                     <Pressable
                       key={index}
                       borderWidth={selectedColorIndex === index ? 4 : 0}
+                      borderColor={
+                        selectedColorIndex === index ? Colors.lightBlack : ""
+                      }
                       rounded={selectedColorIndex === index ? 8 : 0}
                       onPress={() => handlePress(index)}
                     >
@@ -171,6 +185,7 @@ export default function SelectVarients({ visible, onClose, productData }) {
                           w={20}
                           h={20}
                           resizeMode="contain"
+                          rounded={8}
                           source={{
                             uri: `${api.API_URL}assets/img/${i.image_url[0].url}`,
                           }}
@@ -181,114 +196,67 @@ export default function SelectVarients({ visible, onClose, productData }) {
               </HStack>
             </ScrollView>
           </VStack>
-          <HStack>
-            <VStack mt={4} w="50%">
-              <Heading
-                fontSize={18}
-                fontWeight="semibold"
-                color={formError ? Colors.red : Colors.lightBlack}
+
+          <Heading
+            fontSize={18}
+            fontWeight="semibold"
+            color={formError ? Colors.red : Colors.lightBlack}
+            mt={3}
+          >
+            Select Size
+          </Heading>
+          <HStack mt={2} space={2}>
+            {sizes.map((i, index) => (
+              <Center
+                bg={Colors.white}
+                key={index}
+                shadow={4}
+                borderWidth={selectedSize === i ? 2 : 0.5}
+                borderColor={
+                  selectedSize === i ? Colors.black : Colors.lightWhite
+                }
+                px={4}
+                py={2}
+                rounded={5}
               >
-                Select Size
-              </Heading>
-              <FormControl w="3/4" maxW="300">
-                <Select
-                  width={150}
-                  h={10}
-                  rounded="full"
-                  shadow={4}
-                  accessibilityLabel="Choose Service"
-                  borderColor={formError ? Colors.red : Colors.lightBlack}
-                  onValueChange={(itemValue, itemIndex) =>
-                    handleSizeChange(itemValue, itemIndex)
-                  }
-                  placeholder="Sizes"
-                  _selectedItem={{
-                    bg: "teal.600",
-                    endIcon: (
-                      <AntDesign name="checkcircleo" size={24} color="black" />
-                    ),
-                  }}
-                  mt="1"
-                >
-                  {sizes.map((i, index) => (
-                    <Select.Item
-                      label={`${i} ${
-                        sizesAvailable[index] === 1
-                          ? "Out of Stock"
-                          : "     In Stock "
-                      }`}
-                      value={i}
-                      key={index}
-                      style={{
-                        color:
-                          sizesAvailable[index] === 1
-                            ? Colors.red
-                            : Colors.black,
-                      }}
-                      disabled={sizesAvailable[index] === 1}
-                    />
-                  ))}
-                </Select>
-              </FormControl>
-            </VStack>
-            <VStack mt={4} w="45%">
-              <Heading
-                fontSize={18}
-                fontWeight="semibold"
-                color={Colors.lightBlack}
-                mb={1}
-              >
-                Quantity
-              </Heading>
-              <InputSpinner
-                max={sizesAvailable[selectedSizeQty]}
-                min={1}
-                step={1}
-                height={40}
-                onChange={(num) => setQuantity(num)}
-                initialValue={1}
-                width={150}
-                buttonFontSize={19}
-                colorMax={"#f04048"}
-                colorMin={"#40c5f4"}
-                skin="round"
-              />
-            </VStack>
+                <Pressable onPress={() => handleSizeChange(i, index)}>
+                  <Box>
+                    <Text fontSize={16} bold>
+                      {i}
+                    </Text>
+                  </Box>
+                </Pressable>
+              </Center>
+            ))}
           </HStack>
 
-          <HStack space={2} mt={2}>
-            <Text bold fontSize={18} color={Colors.green} id="totalPrice">
+          <HStack space={2} mt={3}>
+            <Text bold fontSize={21} color={Colors.green} id="totalPrice">
               ₹{price * quantity}
             </Text>
           </HStack>
 
           {isUser ? (
-            <HStack justifyContent="space-between" mt={4}>
+            <HStack space={2} mt={4}>
               <Button
                 w="50%"
                 rounded={0}
                 bg={Colors.skyblue}
-                _text={{ fontSize: "18px", fontWeight: "bold" }}
-                borderLeftRadius={18}
-                shadow={4}
+                _text={{ fontSize: "20px", fontWeight: "bold" }}
+                borderRadius="full"
                 onPress={() => handleCart()}
               >
-                {added ? (
-                  <HStack space={1} alignItems="center">
-                    <Text fontSize="17px" bold>
-                      Added
-                    </Text>
-                    <MaterialIcons name="verified" size={16} color="black" />
-                  </HStack>
-                ) : (
-                  "Add to Cart"
-                )}
+                {addingCart ? <Spinner size="lg" /> : "Add to Cart"}
               </Button>
-              <CheckOut
-                totalPrice={price * quantity}
-                buy={true}
-                buyData={formData}
-              />
+              <Center
+                p={3}
+                rounded="full"
+                bg={Colors.white}
+                borderColor={Colors.skyblue}
+                borderWidth={2}
+              >
+                <AntDesign name="heart" size={24} color="red" />
+              </Center>
             </HStack>
           ) : (
             <Button
@@ -299,10 +267,6 @@ export default function SelectVarients({ visible, onClose, productData }) {
               LOGIN TO BUY/ADD TO CART
             </Button>
           )}
-
-          <Button mt={10} w={20} rounded="full" onPress={() => onClose()}>
-            Close
-          </Button>
         </Box>
       </Box>
     </Modal>
