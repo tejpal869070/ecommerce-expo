@@ -27,7 +27,7 @@ export default function CartItem2({ isZero, onTotalPriceChange }) {
 
   const getCartData = async () => {
     try {
-      const data = await CartData();
+      const data = await CartData(); 
       setProductData(data.data);
       if (data.data.length === 0) {
         isZero();

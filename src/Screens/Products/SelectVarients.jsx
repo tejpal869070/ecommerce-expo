@@ -17,7 +17,11 @@ import { Modal, ScrollView } from "react-native";
 import { Colors } from "../../color";
 import { api } from "../../Config/api";
 import { AntDesign, Entypo } from "@expo/vector-icons";
-import { AddtoCart, CheckToken } from "../../Controller/User/UserController";
+import {
+  AddtoCart,
+  CartData,
+  CheckToken,
+} from "../../Controller/User/UserController";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export default function SelectVarients({ visible, onClose, productData }) {
@@ -28,6 +32,12 @@ export default function SelectVarients({ visible, onClose, productData }) {
   const [isUser, setIsUser] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [addingCart, setAddingCart] = useState(false);
+  const [cartData, setCartData] = useState([]);
+  const [isInCart, setIsInCart] = useState(false);
+
+  console.log("isInCart", isInCart);
+
+  console.log("cartDataaa", cartData);
   const [price, setPrice] = useState(
     productData.colorDetails[0].sizeDetails[0].regular_price
   );
@@ -59,14 +69,32 @@ export default function SelectVarients({ visible, onClose, productData }) {
     selectedColorIndex
   ].sizeDetails.map((obj) => obj.quantity);
 
+  const productInCart = (selectedSizeIndex) => {
+    if (
+      cartData.some(
+        (item) =>
+          item.color === formData.color &&
+          item.size === selectedSizeIndex &&
+          item.product_id === formData.product_id
+      )
+    ) {
+      setIsInCart(true);
+    } else {
+      setIsInCart(false);
+    }
+  };
+
   const handleSizeChange = (selectedSizeIndex, itemIndex) => {
     setSelectedSize(selectedSizeIndex);
+    productInCart(selectedSizeIndex)
     setPrice(
       productData.colorDetails[selectedColorIndex].sizeDetails[
         sizes.indexOf(selectedSizeIndex)
       ].regular_price
     );
   };
+
+  
 
   const formData = {
     product_id: productData.id,
@@ -75,10 +103,7 @@ export default function SelectVarients({ visible, onClose, productData }) {
     qty: quantity,
   };
 
-  console.log(formData);
-
   const handleCart = async () => {
-    console.log(formData);
     setAddingCart(true);
     if (formData.size === undefined) {
       setFormError(true);
@@ -89,6 +114,7 @@ export default function SelectVarients({ visible, onClose, productData }) {
     try {
       const response = await AddtoCart(formData);
       if (response.status) {
+        productInCart(formData.size)
         toast.closeAll();
         setAdded(true);
         toast.show({ title: "Added", placement: "top" });
@@ -122,6 +148,21 @@ export default function SelectVarients({ visible, onClose, productData }) {
     React.useCallback(() => {
       CheckUserLogin();
     }, [])
+  );
+
+  const getCartItems = async () => {
+    try {
+      const response = await CartData();
+      setCartData(response.data);
+    } catch (error) {
+      setCartData([]);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getCartItems();
+    }, [selectedSize])
   );
 
   return (
@@ -238,16 +279,29 @@ export default function SelectVarients({ visible, onClose, productData }) {
 
           {isUser ? (
             <HStack space={2} mt={4}>
-              <Button
-                w="50%"
-                rounded={0}
-                bg={Colors.skyblue}
-                _text={{ fontSize: "20px", fontWeight: "bold" }}
-                borderRadius="full"
-                onPress={() => handleCart()}
-              >
-                {addingCart ? <Spinner size="lg" /> : "Add to Cart"}
-              </Button>
+              {isInCart ? (
+                <Button
+                  w="50%"
+                  rounded={0}
+                  bg={Colors.skyblue}
+                  _text={{ fontSize: "20px", fontWeight: "bold" }}
+                  borderRadius="full"
+                  onPress={() => navigation.navigate("Cart")}
+                >
+                  View Cart
+                </Button>
+              ) : (
+                <Button
+                  w="50%"
+                  rounded={0}
+                  bg={Colors.skyblue}
+                  _text={{ fontSize: "20px", fontWeight: "bold" }}
+                  borderRadius="full"
+                  onPress={() => handleCart()}
+                >
+                  {addingCart ? <Spinner size="lg" /> : "Add to Cart"}
+                </Button>
+              )}
               <Center
                 p={3}
                 rounded="full"

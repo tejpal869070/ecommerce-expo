@@ -10,10 +10,10 @@ import React from "react";
 import HomeScreen from "../Screens/Home/HomeScreen";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Colors } from "../color";
-import CartScreen from "../Screens/Cart/CartScreen";
 import CategoryNav from "./CategoryNav";
 import ProfileNav from "./ProfileNav";
-import { Box } from "native-base";
+import { Box } from "native-base"; 
+import CartNav from "./CartNav";
 
 const Tab = createBottomTabNavigator();
 
@@ -34,7 +34,7 @@ export default function BottomNav() {
           component={HomeScreen}
           options={{
             tabBarIcon: ({ focused }) => (
-              <View alignItems="center" >
+              <View alignItems="center">
                 {focused ? (
                   <Entypo name="home" size={24} color={Colors.main} />
                 ) : (
@@ -46,7 +46,7 @@ export default function BottomNav() {
         />
 
         <Tab.Screen
-          name="Categoriesnav"
+          name="Categories"
           component={CategoryNav}
           options={{
             tabBarIcon: ({ focused }) => (
@@ -63,7 +63,7 @@ export default function BottomNav() {
 
         <Tab.Screen
           name="Cart"
-          component={CartScreen}
+          component={CartNav}
           options={{
             tabBarIcon: ({ focused }) => (
               <View alignItems="center">
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.lightWhite,
     width: (width * 97) / 100,
     margin: "auto",
-    borderRadius: 30, 
+    borderRadius: 30,
     marginTop: 8,
   },
 });

@@ -57,7 +57,7 @@ export default function CartScreen() {
         </Text>
       </Center>
       {/*  <CartEmpty/> */}
-      {!isUser || productData.length===0 ? (
+      {!isUser || productData.length === 0 ? (
         <Center h="70%">
           <Center w={150} h={150} bg={Colors.white} rounded="full">
             <FontAwesome name="shopping-basket" size={64} color={Colors.main} />
@@ -97,7 +97,19 @@ export default function CartScreen() {
           </Center>
 
           {/*Check out button */}
-          <CheckOut totalPrice={totalPrice} />
+          {/* <CheckOut totalPrice={totalPrice} />*/}
+          <Button
+            bg={Colors.black}
+            mt={4}
+            mx={4}
+            rounded="full"
+            py={4}
+            _pressed={{ bg: Colors.black }}
+            _text={{ fontWeight: "bold" }}
+            onPress={() => navigation.navigate("Checkout")}
+          >
+            CHECKOUT
+          </Button>
 
           <Box py={6}></Box>
         </ScrollView>
