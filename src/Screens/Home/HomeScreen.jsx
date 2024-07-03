@@ -12,11 +12,11 @@ import HomeProducts from "../../Componentes/Home/HomeProducts";
 import Trendings from "../Products/Trendings";
 import MensSection from "../Products/MensSection";
 import { GetAllProducts } from "../../Controller/Product/ProductController";
-import mensBanner from "../../Assets/Images/trendy-mens.jpeg";
-import womensBanner from "../../Assets/Images/trending-women.jpeg";
+import mensBanner from "../../Assets/Images/mensSection.jpg";
+import womensBanner from "../../Assets/Images/womensSection.jpg";
 import { useFocusEffect } from "@react-navigation/native";
 
-const sliderImages = [banner1, banner2];
+const sliderImages = [banner1, banner2]; 
 
 export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
@@ -74,7 +74,7 @@ export default function HomeScreen() {
           <MensSection products={mensProduct} banner={mensBanner} />
         )}
         {womensProducts && (
-          <MensSection products={womensProducts} banner={womensBanner} />
+          <MensSection products={womensProducts} banner={womensBanner} womens={true} />
         )}
 
         {/* <HomeProducts/> */}

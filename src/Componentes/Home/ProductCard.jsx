@@ -12,13 +12,15 @@ export default function ProductCard({ item }) {
   return (
     <Pressable
       w={140}
-      rounded="md"
+      rounded={10}
+      h={200}
       bg={Colors.white}
       shadow={2}
       onPress={() => navigation.navigate("Single", { itemId: item.id })}
     >
       <ImageBackground
         source={bg1}
+        
         alt="Background Image"
         resizeMode="cover"
         style={{ padding: "40px" }}

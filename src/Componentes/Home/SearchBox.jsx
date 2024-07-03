@@ -68,7 +68,8 @@ export default function SearchBox() {
         <Input
           placeholder="Restaurant, food"
           bg={Colors.white}
-          w="70%"
+          rounded="full"
+          w="85%"
           type="search"
           fontSize={16}
           borderWidth={0}
@@ -79,21 +80,22 @@ export default function SearchBox() {
           value={searchKey}
           onChangeText={(value) => handleSearch(value)}
           InputRightElement={
-            <Entypo
-              name="circle-with-cross"
-              size={20}
-              onPress={() => clearSearch()}
-              color="black"
-            />
+            <Box marginRight={2}>
+              <Entypo
+                name="circle-with-cross"
+                size={22}
+                onPress={() => clearSearch()}
+                color="black"
+              />
+            </Box>
           }
           borderRightWidth={0.5}
           variant="outline"
           _focus={{
             bg: Colors.white,
           }}
-          pr={2}
         />
-        <Pressable>
+        {/*<Pressable>
           <FontAwesome name="bell" size={24} color="black" />
           <Box
             px={1}
@@ -106,7 +108,7 @@ export default function SearchBox() {
           >
             5
           </Box>
-        </Pressable>
+        </Pressable>*/}
       </HStack>
       {isOpen && (
         <ScrollView

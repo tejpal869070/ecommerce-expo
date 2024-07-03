@@ -12,5 +12,8 @@ export const Colors= {
     green : "#008000",
     lightRed : "#ec545f",
     whiteTrans: "#04040485",
-    transperent : "#ffffff00"
+    transperent : "#ffffff00",
+    lightWhiteGreen : "#ECFFF3",
+    lightPink: "#FFF0FE",
+    lightSkyBlue:"#EDFFFE"
 }

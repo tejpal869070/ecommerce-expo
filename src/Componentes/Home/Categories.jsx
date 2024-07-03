@@ -44,6 +44,7 @@ export default function Categories() {
         horizontal={true}
         py={4}
         showsHorizontalScrollIndicator={false}
+        bg={Colors.transperent}
       >
         <HStack space={2} px={4}>
           {loading
@@ -60,19 +61,23 @@ export default function Categories() {
                     <Center
                       h="60px"
                       w="60px"
-                      bg={Colors.skyBlueLight}
+                      p={0.5}
                       rounded="full"
                       overflow="hidden"
+                      borderWidth={0.5}
+                      borderColor={Colors.whiteTrans}
                     >
-                      <Image
-                        alt="img"
-                        source={{
-                          uri: `${api.API_URL}assets/img/${i.image_url}`,
-                        }}
-                        h="50px"
-                        w="50px"
-                        resizeMode="contain"
-                      />
+                      <Center bg={Colors.skyBlueLight} rounded="full" w="full" h="full">
+                        <Image
+                          alt="img"
+                          source={{
+                            uri: `${api.API_URL}assets/img/${i.image_url}`,
+                          }}
+                          h="50px"
+                          w="50px"
+                          resizeMode="contain"
+                        />
+                      </Center>
                     </Center>
                     <Text
                       shadow={1}

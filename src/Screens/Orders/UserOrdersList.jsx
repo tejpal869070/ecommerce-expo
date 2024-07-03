@@ -16,7 +16,7 @@ import { GetUserOrders } from "../../Controller/User/UserController";
 import { api } from "../../Config/api";
 
 export default function UserOrdersList() {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState([]); 
   const navigation = useNavigation();
 
   const getUserOrders = async () => {
@@ -28,6 +28,7 @@ export default function UserOrdersList() {
     } catch (error) {
       console.log(error);
     }
+    
   };
 
   useFocusEffect(
@@ -35,7 +36,7 @@ export default function UserOrdersList() {
       getUserOrders();
     }, [])
   );
-  
+
   return (
     <Box flex={1} bg={Colors.lightGreen}>
       <ScrollView w="full" px={1} showsVerticalScrollIndicator={false}>
