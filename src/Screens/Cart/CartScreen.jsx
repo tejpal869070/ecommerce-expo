@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { Colors } from "../../color";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import CartItem2 from "./CartItem2";
-import { StatusBar } from "expo-status-bar";
-import CheckOut from "../Orders/CheckOut";
+import { StatusBar } from "expo-status-bar"; 
 import { CartData, CheckToken } from "../../Controller/User/UserController";
 import { FontAwesome } from "@expo/vector-icons";
 
@@ -82,7 +81,7 @@ export default function CartScreen() {
               w="90%"
               justifyContent="space-between"
             >
-              <Text bold>Total Bill</Text>
+              <Text bold>Total Amount</Text>
               <Button
                 bg={Colors.main}
                 _text={{ fontWeight: "bold" }}
