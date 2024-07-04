@@ -27,10 +27,7 @@ export default function CheckOutScreen() {
 
   const changePaymentMethod = (index) => {
     setSelectedPayment(index);
-
   };
-
-   
 
   /*user details */
 
@@ -128,6 +125,13 @@ export default function CheckOutScreen() {
             </HStack>
           )}
         </HStack>
+        {addressData.length !== 0 && (
+          <Pressable pt={1} onPress={() => openAddressPopup()}>
+            <Text bold textAlign="right" color={Colors.main}>
+              + Add New
+            </Text>
+          </Pressable>
+        )}
 
         {/*Payment Method */}
         <Heading fontSize={18} mt={6}>
@@ -211,11 +215,21 @@ export default function CheckOutScreen() {
         </VStack>
 
         <Box mt={6}>
-          <Button rounded="full" _text={{
-            color: Colors.white,
-            fontWeight:"bold",
-            fontSize:"18px"
-          }} h={12} bg={Colors.main} fontSize={18} bold color={Colors.green}>ORDER</Button>
+          <Button
+            rounded="full"
+            _text={{
+              color: Colors.white,
+              fontWeight: "bold",
+              fontSize: "18px",
+            }}
+            h={12}
+            bg={Colors.main}
+            fontSize={18}
+            bold
+            color={Colors.green}
+          >
+            ORDER
+          </Button>
         </Box>
       </Box>
 
@@ -235,21 +249,21 @@ const ShippingInputs = [
   {
     image: require("../../Assets/Images/cod.png"),
     alt: "Cod",
-    type:"COD"
+    type: "COD",
   },
   {
     image: require("../../Assets/Images/upi.png"),
     alt: "upi",
-    type:"UPI"
+    type: "UPI",
   },
   {
     image: require("../../Assets/Images/visa.png"),
     alt: "visa",
-    type:"CARD"
+    type: "CARD",
   },
   {
     image: require("../../Assets/Images/paytm.png"),
     alt: "visa",
-    type:"PAYTM"
+    type: "PAYTM",
   },
 ];
