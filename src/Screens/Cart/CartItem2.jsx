@@ -16,23 +16,25 @@ import { ElectronicsData } from "../../Assets/Data/ElectronicsData";
 import { api } from "../../Config/api";
 import { CartData, CartRemove } from "../../Controller/User/UserController";
 import { useFocusEffect } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 
 export default function CartItem2({ isZero, onTotalPriceChange }) {
   const toast = useToast();
   const [productData, setProductData] = useState([]);
   const [actualPrice, setActualPrices] = useState([]);
   const [changePrices, setChangePrice] = useState([]);
-  const [maxQty, setMaxQty] = useState([]); 
- 
+  const [maxQty, setMaxQty] = useState([]);
+  const [cartData, setCartData] = useState([]);
 
   const getCartData = async () => {
     try {
-      const data = await CartData(); 
+      const data = await CartData();
       setProductData(data.data);
       if (data.data.length === 0) {
         isZero();
         return;
       }
+
       setActualPrices(
         data.data.map(
           (item) => item.colorDetails[0].sizeDetails[0].regular_price
@@ -66,7 +68,7 @@ export default function CartItem2({ isZero, onTotalPriceChange }) {
   };
 
   useEffect(() => {
-    const overAllCost = changePrices.reduce((i1, i2) => i1 + i2, 0)
+    const overAllCost = changePrices.reduce((i1, i2) => i1 + i2, 0);
     onTotalPriceChange(overAllCost);
   }, [changePrices]);
 

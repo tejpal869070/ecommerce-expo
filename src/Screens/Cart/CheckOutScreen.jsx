@@ -14,10 +14,13 @@ import {
 import { Colors } from "../../color";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { GetUserDetails } from "../../Controller/User/UserController";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import AddAddress from "../../Componentes/User/AddAddress";
 
 export default function CheckOutScreen() {
+  const params = useRoute();
+  const { totalPrice } = params.params;
+  console.log(totalPrice);
   const [selectedPayment, setSelectedPayment] = useState(0);
   const [isAddressPopup, setIsAddressPopup] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -28,6 +31,11 @@ export default function CheckOutScreen() {
   const changePaymentMethod = (index) => {
     setSelectedPayment(index);
   };
+
+  const itemsPrice = totalPrice;
+  const shippingPrice = (totalPrice * 5) / 100;
+  const discountPrice = (totalPrice * 10) / 100;
+  const totalBillAmount = totalPrice + shippingPrice - discountPrice;
 
   /*user details */
 
@@ -177,10 +185,10 @@ export default function CheckOutScreen() {
         >
           <HStack justifyContent="space-between">
             <Text fontWeight="semibold" color={Colors.lightBlack}>
-              Items(1)
+              Items
             </Text>
             <Text fontWeight="semibold" color={Colors.lightBlack}>
-              ₹1000
+              ₹{itemsPrice}
             </Text>
           </HStack>
           <HStack justifyContent="space-between">
@@ -188,7 +196,7 @@ export default function CheckOutScreen() {
               Shipping
             </Text>
             <Text fontWeight="semibold" color={Colors.lightBlack}>
-              +₹40
+              + ₹{shippingPrice.toFixed(0)}
             </Text>
           </HStack>
           <HStack justifyContent="space-between">
@@ -196,7 +204,7 @@ export default function CheckOutScreen() {
               Discount
             </Text>
             <Text fontWeight="semibold" color={Colors.lightBlack}>
-              -₹20
+              - ₹{discountPrice.toFixed(0)}
             </Text>
           </HStack>
           <HStack
@@ -209,7 +217,7 @@ export default function CheckOutScreen() {
               Total Bill
             </Text>
             <Text fontSize={18} bold color={Colors.green}>
-              ₹1020
+              ₹{totalBillAmount.toFixed(0)}
             </Text>
           </HStack>
         </VStack>

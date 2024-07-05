@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Colors } from "../../color";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import CartItem2 from "./CartItem2";
-import { StatusBar } from "expo-status-bar"; 
+import { StatusBar } from "expo-status-bar";
 import { CartData, CheckToken } from "../../Controller/User/UserController";
 import { FontAwesome } from "@expo/vector-icons";
 
@@ -105,7 +105,9 @@ export default function CartScreen() {
             py={4}
             _pressed={{ bg: Colors.black }}
             _text={{ fontWeight: "bold" }}
-            onPress={() => navigation.navigate("Checkout")}
+            onPress={() =>
+              navigation.navigate("Checkout", { totalPrice: totalPrice })
+            }
           >
             CHECKOUT
           </Button>
