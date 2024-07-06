@@ -15,8 +15,10 @@ import { GetAllProducts } from "../../Controller/Product/ProductController";
 import mensBanner from "../../Assets/Images/mensSection.jpg";
 import womensBanner from "../../Assets/Images/womensSection.jpg";
 import { useFocusEffect } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
+import { SetCartDataToLocal } from "../../Controller/User/UserController";
 
-const sliderImages = [banner1, banner2]; 
+const sliderImages = [banner1, banner2];
 
 export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
@@ -53,6 +55,7 @@ export default function HomeScreen() {
   useFocusEffect(
     React.useCallback(() => {
       getProducts();
+      SetCartDataToLocal();
     }, [])
   );
 
@@ -74,7 +77,11 @@ export default function HomeScreen() {
           <MensSection products={mensProduct} banner={mensBanner} />
         )}
         {womensProducts && (
-          <MensSection products={womensProducts} banner={womensBanner} womens={true} />
+          <MensSection
+            products={womensProducts}
+            banner={womensBanner}
+            womens={true}
+          />
         )}
 
         {/* <HomeProducts/> */}

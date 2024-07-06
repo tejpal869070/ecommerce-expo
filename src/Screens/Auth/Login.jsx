@@ -15,7 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import * as SecureStore from "expo-secure-store";
-import { userLogin } from "../../Controller/User/UserController";
+import { CartData, userLogin } from "../../Controller/User/UserController";
 import PageLoader from "../../Componentes/Loadings/PageLoader";
 
 export default function LoginScreen({ navigation }) {
@@ -48,15 +48,15 @@ export default function LoginScreen({ navigation }) {
     }
     setFormError("");
     try {
-      const response = await userLogin(userData);  
-      
+      const response = await userLogin(userData);
+
       await SecureStore.setItemAsync("token", response.token);
-      await SecureStore.setItemAsync("email", response.email);
+      await SecureStore.setItemAsync("email", response.email); 
       setEmail("");
       setPassword("");
       navigation.navigate("Bottom");
       setLoading(false);
-    } catch (error) { 
+    } catch (error) {
       if (error.response && error.response.status === 404) {
         setFormError("Email or Password is wrong.");
         setLoading(false);
@@ -66,6 +66,8 @@ export default function LoginScreen({ navigation }) {
       setLoading(false);
     }
   };
+
+   
 
   return (
     <Box flex={1} bg={Colors.main} position="relative">

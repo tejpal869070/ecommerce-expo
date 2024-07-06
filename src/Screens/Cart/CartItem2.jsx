@@ -12,75 +12,46 @@ import _ from "lodash";
 import { Colors } from "../../color";
 import InputSpinner from "react-native-input-spinner";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ElectronicsData } from "../../Assets/Data/ElectronicsData";
 import { api } from "../../Config/api";
 import { CartData, CartRemove } from "../../Controller/User/UserController";
 import { useFocusEffect } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 
 export default function CartItem2({ isZero, onTotalPriceChange }) {
-  const toast = useToast();
-  const [productData, setProductData] = useState([]);
-  const [actualPrice, setActualPrices] = useState([]);
-  const [changePrices, setChangePrice] = useState([]);
-  const [maxQty, setMaxQty] = useState([]);
   const [cartData, setCartData] = useState([]);
 
-  const getCartData = async () => {
-    try {
-      const data = await CartData();
-      setProductData(data.data);
-      if (data.data.length === 0) {
+  {/* console.log("cartData",cartData);
+
+  const getCartDataFromLocal = async () => {
+    const cartItems = await SecureStore.getItemAsync("cartItems");
+    if (cartItems) {
+      setCartData(JSON.parse(cartItems));
+      console.log("from local")
+    } else {
+      try {
+        const response = await CartData();
+        if (data.data.length === 0) {
+          isZero();
+          return;
+        }
+        setCartData(response.data); 
+        const ids = response.data.map((item)=>item.cart_id)
+        await SecureStore.setItemAsync("cartItems", ids);
+      } catch (error) {
         isZero();
-        return;
       }
-
-      setActualPrices(
-        data.data.map(
-          (item) => item.colorDetails[0].sizeDetails[0].regular_price
-        )
-      );
-      setChangePrice(
-        data.data.map(
-          (item) => item.colorDetails[0].sizeDetails[0].regular_price
-        )
-      );
-      setMaxQty(
-        data.data.map((item) => item.colorDetails[0].sizeDetails[0].quantity)
-      );
-    } catch (error) {
-      console.log("eror", error);
     }
   };
-
-  const handleRemove = async (id) => {
-    try {
-      const response = await CartRemove(id);
-      if (response.status) {
-        toast.closeAll();
-        getCartData();
-        toast.show({ title: "Removed", placement: "top" });
-      }
-    } catch (error) {
-      toast.show({ title: "Error", placement: "top" });
-      console.log("object", error);
-    }
-  };
-
-  useEffect(() => {
-    const overAllCost = changePrices.reduce((i1, i2) => i1 + i2, 0);
-    onTotalPriceChange(overAllCost);
-  }, [changePrices]);
 
   useFocusEffect(
     React.useCallback(() => {
-      getCartData();
+      getCartDataFromLocal();
     }, [])
-  );
+  ); */}
 
   return (
     <Box px={3}>
-      {productData &&
+      {/*  {productData &&
         productData.map((i, index) => (
           <HStack
             w="full"
@@ -142,7 +113,7 @@ export default function CartItem2({ isZero, onTotalPriceChange }) {
               </HStack>
             </VStack>
           </HStack>
-        ))}
+        ))}  */}
     </Box>
   );
 }

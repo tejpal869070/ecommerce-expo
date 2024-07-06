@@ -19,6 +19,7 @@ import * as SecureStore from "expo-secure-store";
 import {
   CheckToken,
   GetUserDetails,
+  SetCartDataToLocal,
 } from "../../Controller/User/UserController";
 import ChangePassword from "./ChangePassword";
 import ShowAddress from "./ShowAddress";
@@ -37,7 +38,8 @@ export default function ProfileScreen() {
 
   const handleLogout = async () => {
     await SecureStore.deleteItemAsync("token");
-    await SecureStore.deleteItemAsync("mobile");
+    await SecureStore.deleteItemAsync("email");
+    await SecureStore.deleteItemAsync("cartData") 
     navigation.navigate("Login");
   };
 
@@ -70,6 +72,7 @@ export default function ProfileScreen() {
     React.useCallback(() => {
       getUserDetails();
       CheckUserLogin();
+      SetCartDataToLocal()
     }, [])
   );
 
@@ -78,7 +81,7 @@ export default function ProfileScreen() {
       <Center bg={Colors.lightGreen} pt={10} pb={3}>
         <Text bold fontSize={20} color={Colors.green}>
           Profile
-        </Text>
+        </Text> 
       </Center>
       <HStack alignItems="center" py={4}>
         <Box

@@ -19,8 +19,7 @@ import AddAddress from "../../Componentes/User/AddAddress";
 
 export default function CheckOutScreen() {
   const params = useRoute();
-  const { totalPrice } = params.params;
-  console.log(totalPrice);
+  const { totalPrice } = params.params; 
   const [selectedPayment, setSelectedPayment] = useState(0);
   const [isAddressPopup, setIsAddressPopup] = useState(false);
   const [loading, setLoading] = useState(true);

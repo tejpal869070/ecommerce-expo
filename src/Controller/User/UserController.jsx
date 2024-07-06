@@ -41,7 +41,7 @@ export const userRegistration = async (userData) => {
       mobile: userData.mobile,
       password: userData.password,
       email: userData.email,
-      token: userData.token
+      token: userData.token,
     };
     const response = await axios.post(`${api.API_URL}user/register`, postData);
     return response.data;
@@ -136,10 +136,10 @@ export const ChangeUserPassword = async (formData) => {
       postData,
       axiosConfig
     );
-    console.log(response)
+    console.log(response);
     return response.data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     throw error;
   }
 };
@@ -164,7 +164,7 @@ export const AddtoCart = async (formData) => {
 };
 
 export const CartData = async () => {
-  const email = await SecureStore.getItemAsync("email"); 
+  const email = await SecureStore.getItemAsync("email");
   const postData = {
     email: email,
   };
@@ -261,8 +261,7 @@ export const PlaceOrder = async (formData) => {
   }
 };
 
-
-export const OtpVerification = async (formData) => { 
+export const OtpVerification = async (formData) => {
   try {
     const postData = {
       email: formData.email,
@@ -280,7 +279,6 @@ export const OtpVerification = async (formData) => {
   }
 };
 
-
 export const SendOtp = async (emailid) => {
   try {
     const email = emailid;
@@ -291,5 +289,21 @@ export const SendOtp = async (emailid) => {
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+
+export const SetCartDataToLocal = async () => {
+  const cartData = await SecureStore.getItemAsync("cartData");
+  if (!cartData) {
+    const id = [];
+    try {
+      const response = await CartData();
+      const ids = response.data.map((item) => item.cart_id);
+      id.push(...ids);
+      console.log("id", id);
+      await SecureStore.setItemAsync("cartData", JSON.stringify(id));
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
