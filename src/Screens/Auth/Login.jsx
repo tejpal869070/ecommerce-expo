@@ -15,7 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import * as SecureStore from "expo-secure-store";
-import { CartData, userLogin } from "../../Controller/User/UserController";
+import { CartData, SetCartDataToLocal, userLogin } from "../../Controller/User/UserController";
 import PageLoader from "../../Componentes/Loadings/PageLoader";
 
 export default function LoginScreen({ navigation }) {
@@ -52,6 +52,7 @@ export default function LoginScreen({ navigation }) {
 
       await SecureStore.setItemAsync("token", response.token);
       await SecureStore.setItemAsync("email", response.email); 
+      SetCartDataToLocal()
       setEmail("");
       setPassword("");
       navigation.navigate("Bottom");

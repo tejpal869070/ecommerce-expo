@@ -295,15 +295,32 @@ export const SendOtp = async (emailid) => {
 export const SetCartDataToLocal = async () => {
   const cartData = await SecureStore.getItemAsync("cartData");
   if (!cartData) {
-    const id = [];
     try {
       const response = await CartData();
-      const ids = response.data.map((item) => item.cart_id);
-      id.push(...ids);
-      console.log("id", id);
-      await SecureStore.setItemAsync("cartData", JSON.stringify(id));
+      const ids = response.data.map((item) => ({ id: item.cart_id, qty: 1 }));
+      await SecureStore.setItemAsync("cartData", JSON.stringify(ids));
     } catch (error) {
       console.log(error);
     }
+  }
+};
+
+export const GetCartDataByIds = async () => {
+  const localIds = await SecureStore.getItemAsync("cartData");
+  const email = await SecureStore.getItemAsync("email");
+
+  const formData = {
+    email: email,
+    ids: JSON.parse(localIds) || [],
+  };
+
+  try {
+    const response = await axios.post(
+      `${api.API_URL}user/get-cart-by-id`,
+      formData
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
   }
 };

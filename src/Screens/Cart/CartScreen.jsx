@@ -4,8 +4,13 @@ import { Colors } from "../../color";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import CartItem2 from "./CartItem2";
 import { StatusBar } from "expo-status-bar";
-import { CartData, CheckToken } from "../../Controller/User/UserController";
+import {
+  CartData,
+  CheckToken,
+  GetCartDataByIds,
+} from "../../Controller/User/UserController";
 import { FontAwesome } from "@expo/vector-icons";
+import * as SecureStore from "expo-secure-store";
 
 export default function CartScreen() {
   const navigation = useNavigation();
@@ -19,10 +24,13 @@ export default function CartScreen() {
 
   const getCartData = async () => {
     try {
-      const data = await CartData();
-      setProductData(data.data);
+      const response = await GetCartDataByIds();
+      if (response.status) {
+        setProductData(response.data);
+        console.log(response.data)
+      }
     } catch (error) {
-      console.log("eror", error);
+      console.log("error", error);
     }
   };
 
@@ -70,6 +78,7 @@ export default function CartScreen() {
           <CartItem2
             isZero={checkZero}
             onTotalPriceChange={handleTotalPriceChange}
+            productData={productData}
           />
           <Center mt={5}>
             <HStack

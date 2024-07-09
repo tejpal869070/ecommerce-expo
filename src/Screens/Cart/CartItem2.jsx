@@ -17,41 +17,25 @@ import { CartData, CartRemove } from "../../Controller/User/UserController";
 import { useFocusEffect } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 
-export default function CartItem2({ isZero, onTotalPriceChange }) {
+export default function CartItem2({ isZero, onTotalPriceChange, productData }) {
   const [cartData, setCartData] = useState([]);
+  const toast = useToast();
 
-  {/* console.log("cartData",cartData);
-
-  const getCartDataFromLocal = async () => {
-    const cartItems = await SecureStore.getItemAsync("cartItems");
-    if (cartItems) {
-      setCartData(JSON.parse(cartItems));
-      console.log("from local")
-    } else {
-      try {
-        const response = await CartData();
-        if (data.data.length === 0) {
-          isZero();
-          return;
-        }
-        setCartData(response.data); 
-        const ids = response.data.map((item)=>item.cart_id)
-        await SecureStore.setItemAsync("cartItems", ids);
-      } catch (error) {
-        isZero();
+  const handleRemove = async (id) => {
+    try {
+      const response = await CartRemove(id);
+      if (response.status) {
+        toast.closeAll();
+        toast.show({ title: "Removed", placement: "top" });
       }
+    } catch (error) {
+      alert("Something Went Wrong.");
     }
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getCartDataFromLocal();
-    }, [])
-  ); */}
-
   return (
     <Box px={3}>
-      {/*  {productData &&
+      {productData &&
         productData.map((i, index) => (
           <HStack
             w="full"
@@ -84,7 +68,6 @@ export default function CartItem2({ isZero, onTotalPriceChange }) {
               <HStack justifyContent="space-between">
                 <HStack space={2}>
                   <InputSpinner
-                    max={maxQty[index]}
                     min={1}
                     step={1}
                     height={22}
@@ -94,11 +77,6 @@ export default function CartItem2({ isZero, onTotalPriceChange }) {
                     colorMax={"#f04048"}
                     colorMin={"#40c5f4"}
                     skin="round"
-                    onChange={_.debounce((num) => {
-                      const updatedPrice = [...actualPrice];
-                      updatedPrice[index] = num * actualPrice[index];
-                      setChangePrice(updatedPrice);
-                    }, 500)}
                   />
                   <MaterialIcons
                     onPress={() => handleRemove(i.cart_id)}
@@ -108,12 +86,12 @@ export default function CartItem2({ isZero, onTotalPriceChange }) {
                   />
                 </HStack>
                 <Text color={Colors.green} fontWeight="semibold">
-                  ₹{changePrices[index]}
+                  ₹{i.colorDetails[0].sizeDetails[0].regular_price}
                 </Text>
               </HStack>
             </VStack>
           </HStack>
-        ))}  */}
+        ))}
     </Box>
   );
 }
