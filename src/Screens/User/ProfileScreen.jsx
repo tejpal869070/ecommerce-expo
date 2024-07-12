@@ -39,7 +39,7 @@ export default function ProfileScreen() {
   const handleLogout = async () => {
     await SecureStore.deleteItemAsync("token");
     await SecureStore.deleteItemAsync("email");
-    await SecureStore.deleteItemAsync("cartData") 
+    await SecureStore.deleteItemAsync("cartData");
     navigation.navigate("Login");
   };
 
@@ -72,7 +72,7 @@ export default function ProfileScreen() {
     React.useCallback(() => {
       getUserDetails();
       CheckUserLogin();
-      SetCartDataToLocal()
+      SetCartDataToLocal();
     }, [])
   );
 
@@ -81,7 +81,7 @@ export default function ProfileScreen() {
       <Center bg={Colors.lightGreen} pt={10} pb={3}>
         <Text bold fontSize={20} color={Colors.green}>
           Profile
-        </Text> 
+        </Text>
       </Center>
       <HStack alignItems="center" py={4}>
         <Box
@@ -103,7 +103,11 @@ export default function ProfileScreen() {
         <Box px={4}>
           {isUser ? (
             <VStack>
-              <Text fontSize={22} fontWeight="semibold">
+              <Text
+                fontSize={22}
+                fontWeight="semibold"
+                style={{ flexWrap: "wrap" }}
+              >
                 {userData.uname}
               </Text>
               <Text fontSize={14} fontWeight="medium">
@@ -153,7 +157,7 @@ export default function ProfileScreen() {
           ""
         )}
 
-        <Pressable onPress={()=>navigation.navigate('Terms & Conditions')}>
+        <Pressable onPress={() => navigation.navigate("Terms & Conditions")}>
           <HStack
             bg={Colors.white}
             px={3}
@@ -163,7 +167,7 @@ export default function ProfileScreen() {
             py={3}
           >
             <HStack space={1.5}>
-            <FontAwesome6 name="book" size={22} color="black" />
+              <FontAwesome6 name="book" size={22} color="black" />
               <Text fontSize={15} fontWeight="semibold">
                 Terms & Conditions
               </Text>

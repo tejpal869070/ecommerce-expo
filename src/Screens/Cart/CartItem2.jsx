@@ -17,10 +17,11 @@ import { CartData, CartRemove } from "../../Controller/User/UserController";
 import { useFocusEffect } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 
-export default function CartItem2({ isZero, onTotalPriceChange, productData }) {
+export default function CartItem2({ isZero,   productData }) {
   const toast = useToast();
   const [isClicked, setIsClicked] = useState(true);
   const [cartData, setCartData] = useState();
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const handleRemove = async (id) => {
     try {
@@ -118,6 +119,7 @@ export default function CartItem2({ isZero, onTotalPriceChange, productData }) {
                             "cartData",
                             JSON.stringify(changeData)
                           );
+                          isZero()
                         } catch (error) {
                           console.error(
                             "Error fetching or parsing cart data:",

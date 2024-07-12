@@ -17,7 +17,7 @@ export default function Help() {
       rounded="full"
       shadow={4}
     >
-    <AntDesign name="customerservice" size={24} color="black" />
+      <AntDesign name="customerservice" size={24} color="black" />
       <Text bold fontSize={16}>
         Help
       </Text>

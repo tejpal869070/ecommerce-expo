@@ -18,10 +18,6 @@ export default function CartScreen() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [isUser, setIsUser] = useState(false);
 
-  const handleTotalPriceChange = (price) => {
-    setTotalPrice(price);
-  };
-
   const getCartData = async () => {
     try {
       const response = await GetCartDataByIds();
@@ -34,8 +30,8 @@ export default function CartScreen() {
   };
 
   const checkZero = () => {
-    console.log("work");
     getCartData();
+    checkTotalPrice();
   };
 
   // check user login
@@ -48,10 +44,31 @@ export default function CartScreen() {
     }
   };
 
+  const checkTotalPrice = async () => {
+    const arrayOfPrice = [];
+    const localCartData = await SecureStore.getItemAsync("cartData");
+    if (localCartData) {
+      const cartData = JSON.parse(localCartData);
+      for (let i = 0; i <= cartData.length - 1; i++) {
+        const cartId = cartData[i].id;
+        const cartIdData =
+          productData && productData.find((item) => item.cart_id === cartId);
+        if (cartIdData) {
+          const regular_price =
+            cartIdData.colorDetails[0].sizeDetails[0].regular_price;
+          const qtyInLocal = cartData[i].qty;
+          arrayOfPrice.push(regular_price * qtyInLocal);
+          setTotalPrice(arrayOfPrice.reduce((acc, num) => acc + num, 0));
+        }
+      }
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       getCartData();
       CheckUserLogin();
+      checkTotalPrice();
     }, [])
   );
 
@@ -76,11 +93,7 @@ export default function CartScreen() {
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} mt={1}>
           {productData && (
-            <CartItem2
-              isZero={checkZero}
-              onTotalPriceChange={handleTotalPriceChange}
-              productData={productData}
-            />
+            <CartItem2 isZero={checkZero} productData={productData} />
           )}
           <Center mt={5}>
             <HStack

@@ -7,7 +7,7 @@ import { api } from "../../Config/api";
 
 const { width } = Dimensions.get("window");
 
-const ProductImageSlider = ({ selected, productData }) => { 
+const ProductImageSlider = ({ selected, productData }) => {
   const key = `slider-${selected}`;
   return (
     <Swiper
