@@ -23,6 +23,7 @@ import {
   CheckToken,
 } from "../../Controller/User/UserController";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 
 export default function SelectVarients({ visible, onClose, productData }) {
   const navigation = useNavigation();
@@ -34,10 +35,8 @@ export default function SelectVarients({ visible, onClose, productData }) {
   const [addingCart, setAddingCart] = useState(false);
   const [cartData, setCartData] = useState([]);
   const [isInCart, setIsInCart] = useState(false);
-
-  console.log("isInCart", isInCart);
-
-  console.log("cartDataaa", cartData);
+ 
+ 
   const [price, setPrice] = useState(
     productData.colorDetails[0].sizeDetails[0].regular_price
   );
@@ -86,7 +85,7 @@ export default function SelectVarients({ visible, onClose, productData }) {
 
   const handleSizeChange = (selectedSizeIndex, itemIndex) => {
     setSelectedSize(selectedSizeIndex);
-    productInCart(selectedSizeIndex)
+    productInCart(selectedSizeIndex);
     setPrice(
       productData.colorDetails[selectedColorIndex].sizeDetails[
         sizes.indexOf(selectedSizeIndex)
@@ -94,13 +93,19 @@ export default function SelectVarients({ visible, onClose, productData }) {
     );
   };
 
-  
-
   const formData = {
     product_id: productData.id,
     color: selectedColor,
     size: selectedSize,
     qty: quantity,
+  };
+
+  const handleLocalCartData = async (newId) => { 
+    const localData = await SecureStore.getItemAsync("cartData");
+    const cartData = JSON.parse(localData);
+    const dataToPush = { id: newId, qty: 1 }; 
+    cartData.push(dataToPush); 
+    await SecureStore.setItemAsync("cartData", JSON.stringify(cartData));
   };
 
   const handleCart = async () => {
@@ -114,7 +119,8 @@ export default function SelectVarients({ visible, onClose, productData }) {
     try {
       const response = await AddtoCart(formData);
       if (response.status) {
-        productInCart(formData.size)
+        handleLocalCartData(response.cart_id);
+        productInCart(formData.size);
         toast.closeAll();
         setAdded(true);
         toast.show({ title: "Added", placement: "top" });

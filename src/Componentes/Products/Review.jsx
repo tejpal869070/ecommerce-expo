@@ -4,8 +4,7 @@ import RatingStar from "./RatingStar";
 import { Colors } from "../../color";
 import { Reviews } from "../../Assets/Data/UserData";
 
-export default function Review({ ratings }) {
-  console.log("ratings", ratings); 
+export default function Review({ ratings }) { 
   return (
     <Box mt={3} bg={Colors.white} py={3} mx={1} rounded={5} shadow={4}>
       <Heading bold px={3} fontSize={15} mb={2} color={Colors.green}>

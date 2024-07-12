@@ -18,13 +18,19 @@ import { useFocusEffect } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 
 export default function CartItem2({ isZero, onTotalPriceChange, productData }) {
-  const [cartData, setCartData] = useState([]);
   const toast = useToast();
+  const [isClicked, setIsClicked] = useState(true);
+  const [cartData, setCartData] = useState();
 
   const handleRemove = async (id) => {
     try {
       const response = await CartRemove(id);
       if (response.status) {
+        const previousData = await SecureStore.getItemAsync("cartData");
+        const data = JSON.parse(previousData);
+        const newData = data.filter((item) => item.id !== id);
+        await SecureStore.setItemAsync("cartData", JSON.stringify(newData));
+        isZero();
         toast.closeAll();
         toast.show({ title: "Removed", placement: "top" });
       }
@@ -32,6 +38,21 @@ export default function CartItem2({ isZero, onTotalPriceChange, productData }) {
       alert("Something Went Wrong.");
     }
   };
+
+  const getLocalCartData = async () => {
+    try {
+      const cartData = await SecureStore.getItemAsync("cartData");
+      setCartData(JSON.parse(cartData));
+    } catch (error) {
+      setCartData([]);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getLocalCartData();
+    }, [])
+  );
 
   return (
     <Box px={3}>
@@ -67,17 +88,45 @@ export default function CartItem2({ isZero, onTotalPriceChange, productData }) {
               </Text>
               <HStack justifyContent="space-between">
                 <HStack space={2}>
-                  <InputSpinner
-                    min={1}
-                    step={1}
-                    height={22}
-                    initialValue={1}
-                    width={80}
-                    buttonFontSize={19}
-                    colorMax={"#f04048"}
-                    colorMin={"#40c5f4"}
-                    skin="round"
-                  />
+                  {cartData && (
+                    <InputSpinner
+                      min={1}
+                      step={1}
+                      height={22}
+                      initialValue={
+                        cartData.find((item) => item.id === i.cart_id).qty
+                      }
+                      width={80}
+                      buttonFontSize={19}
+                      colorMax={"#f04048"}
+                      colorMin={"#40c5f4"}
+                      skin="round"
+                      onChange={async (value) => {
+                        try {
+                          const data = await SecureStore.getItemAsync(
+                            "cartData"
+                          );
+                          const cartData = JSON.parse(data);
+                          const changeData = cartData.map((item) => {
+                            if (item.id == i.cart_id) {
+                              item.qty = value;
+                            }
+                            return item;
+                          });
+                          setCartData(changeData);
+                          await SecureStore.setItemAsync(
+                            "cartData",
+                            JSON.stringify(changeData)
+                          );
+                        } catch (error) {
+                          console.error(
+                            "Error fetching or parsing cart data:",
+                            error
+                          );
+                        }
+                      }}
+                    />
+                  )}
                   <MaterialIcons
                     onPress={() => handleRemove(i.cart_id)}
                     name="delete"
@@ -86,7 +135,10 @@ export default function CartItem2({ isZero, onTotalPriceChange, productData }) {
                   />
                 </HStack>
                 <Text color={Colors.green} fontWeight="semibold">
-                  ₹{i.colorDetails[0].sizeDetails[0].regular_price}
+                  ₹
+                  {cartData &&
+                    cartData.find((item) => item.id === i.cart_id).qty *
+                      i.colorDetails[0].sizeDetails[0].regular_price}
                 </Text>
               </HStack>
             </VStack>

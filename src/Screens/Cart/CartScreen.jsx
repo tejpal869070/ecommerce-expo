@@ -27,14 +27,14 @@ export default function CartScreen() {
       const response = await GetCartDataByIds();
       if (response.status) {
         setProductData(response.data);
-        console.log(response.data)
       }
     } catch (error) {
-      console.log("error", error);
+      setProductData([]);
     }
   };
 
   const checkZero = () => {
+    console.log("work");
     getCartData();
   };
 
@@ -75,11 +75,13 @@ export default function CartScreen() {
         </Center>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} mt={1}>
-          <CartItem2
-            isZero={checkZero}
-            onTotalPriceChange={handleTotalPriceChange}
-            productData={productData}
-          />
+          {productData && (
+            <CartItem2
+              isZero={checkZero}
+              onTotalPriceChange={handleTotalPriceChange}
+              productData={productData}
+            />
+          )}
           <Center mt={5}>
             <HStack
               bg={Colors.white}

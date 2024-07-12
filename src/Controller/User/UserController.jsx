@@ -309,10 +309,13 @@ export const GetCartDataByIds = async () => {
   const localIds = await SecureStore.getItemAsync("cartData");
   const email = await SecureStore.getItemAsync("email");
 
+  const ids = JSON.parse(localIds);
+
   const formData = {
     email: email,
-    ids: JSON.parse(localIds) || [],
+    ids: ids.map((item) => item.id) || [],
   };
+ 
 
   try {
     const response = await axios.post(
