@@ -10,6 +10,7 @@ import SingleProduct from "./src/Screens/Products/SingleProduct";
 import SearchedProducts from "./src/Screens/Products/SearchedProducts";
 import RegisterScreen from "./src/Screens/Auth/Register";
 import VerifyOtp from "./src/Screens/Auth/VerifyOtp";
+import ForgotPassword from "./src/Screens/Auth/ForgotPassword";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +20,7 @@ export default function App() {
       <NavigationContainer>
         <StatusBar hidden={true} />
         <Stack.Navigator
-          initialRouteName="Bottom"
+          initialRouteName="ForgotPassword"
           screenOptions={{
             headerShown: false,
           }}
@@ -31,6 +32,7 @@ export default function App() {
           <Stack.Screen name="OrderConfirm" component={OrderConfirm} />
           <Stack.Screen name="Single" component={SingleProduct} />
           <Stack.Screen name="Searched" component={SearchedProducts} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

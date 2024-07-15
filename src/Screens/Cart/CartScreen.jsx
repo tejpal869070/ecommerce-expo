@@ -15,14 +15,18 @@ import * as SecureStore from "expo-secure-store";
 export default function CartScreen() {
   const navigation = useNavigation();
   const [productData, setProductData] = useState([]);
+  console.log("screen", productData);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isUser, setIsUser] = useState(false);
 
   const getCartData = async () => {
     try {
       const response = await GetCartDataByIds();
+      console.log("reson", response.data)
       if (response.status) {
         setProductData(response.data);
+      } else {
+        setProductData([]); 
       }
     } catch (error) {
       setProductData([]);
@@ -81,7 +85,7 @@ export default function CartScreen() {
         </Text>
       </Center>
       {/*  <CartEmpty/> */}
-      {!isUser || productData.length === 0 ? (
+      {!isUser || (productData && productData.length === 0) ? (
         <Center h="70%">
           <Center w={150} h={150} bg={Colors.white} rounded="full">
             <FontAwesome name="shopping-basket" size={64} color={Colors.main} />
@@ -113,7 +117,7 @@ export default function CartScreen() {
                 px={6}
               >
                 <Text color={Colors.white} bold>
-                  ₹{totalPrice}
+                  ₹{totalPrice && totalPrice}
                 </Text>
               </Button>
             </HStack>

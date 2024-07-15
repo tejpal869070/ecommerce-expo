@@ -17,18 +17,18 @@ import { CartData, CartRemove } from "../../Controller/User/UserController";
 import { useFocusEffect } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 
-export default function CartItem2({ isZero,   productData }) {
+export default function CartItem2({ isZero, productData }) {
+  console.log("prodata cart2", productData);
   const toast = useToast();
-  const [isClicked, setIsClicked] = useState(true);
   const [cartData, setCartData] = useState();
-  const [totalPrice, setTotalPrice] = useState(0);
 
   const handleRemove = async (id) => {
     try {
       const response = await CartRemove(id);
+      console.log(id)
       if (response.status) {
         const previousData = await SecureStore.getItemAsync("cartData");
-        const data = JSON.parse(previousData);
+        const data = previousData ? JSON.parse(previousData) : [];
         const newData = data.filter((item) => item.id !== id);
         await SecureStore.setItemAsync("cartData", JSON.stringify(newData));
         isZero();
@@ -37,13 +37,15 @@ export default function CartItem2({ isZero,   productData }) {
       }
     } catch (error) {
       alert("Something Went Wrong.");
+      isZero();
     }
   };
 
   const getLocalCartData = async () => {
     try {
       const cartData = await SecureStore.getItemAsync("cartData");
-      setCartData(JSON.parse(cartData));
+      const data = cartData ? JSON.parse(cartData) : [];
+      setCartData(data);
     } catch (error) {
       setCartData([]);
     }
@@ -119,7 +121,7 @@ export default function CartItem2({ isZero,   productData }) {
                             "cartData",
                             JSON.stringify(changeData)
                           );
-                          isZero()
+                          isZero();
                         } catch (error) {
                           console.error(
                             "Error fetching or parsing cart data:",

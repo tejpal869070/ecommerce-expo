@@ -1,38 +1,54 @@
-import { Box, Center, HStack, Heading, Image, Text, VStack } from "native-base";
+import {
+  Box,
+  Center,
+  HStack,
+  Heading,
+  Image,
+  Pressable,
+  Text,
+  VStack,
+} from "native-base";
 import React, { useState } from "react";
 import RatingStar from "./RatingStar";
 import { Colors } from "../../color";
 import { Reviews } from "../../Assets/Data/UserData";
 
-export default function Review({ ratings }) { 
+export default function Review({ ratings }) {
   return (
     <Box mt={3} bg={Colors.white} py={3} mx={1} rounded={5} shadow={4}>
       <Heading bold px={3} fontSize={15} mb={2} color={Colors.green}>
         REVIEWS
       </Heading>
 
-      {ratings.map((i, index) => (
-        <HStack
-          w="full"
-          borderTopWidth={0.5}
-          borderBottomWidth={0.5}
-          py={2}
-          key={index}
-        >
-          <VStack w="80%" px={2}>
-            <RatingStar value={i.rating} />
-            <Text color={Colors.lightBlack} fontSize={12}>
-              Review for someone
-            </Text>
-            <Text mt={1} fontSize={16}>
-              {i.review}
-            </Text>
-          </VStack>
-          <Center w="20%" p={1}>
-            <Image alt="review" w={20} h={20} source={Reviews[0].image} />
-          </Center>
-        </HStack>
-      ))}
+      {ratings &&
+        ratings.slice(0, 4).map((i, index) => (
+          <HStack
+            w="full"
+            borderTopWidth={0.5}
+            borderBottomWidth={0.5}
+            py={2}
+            key={index}
+          >
+            <VStack w="80%" px={2}>
+              <RatingStar value={i.rating} />
+              <Text color={Colors.lightBlack} fontSize={12}>
+                Review for someone
+              </Text>
+              <Text mt={1} fontSize={16}>
+                {i.review}
+              </Text>
+            </VStack>
+            <Center w="20%" p={1}>
+              <Image alt="review" w={20} h={20} source={Reviews[0].image} />
+            </Center>
+          </HStack>
+        ))}
+
+      <Pressable px={2}>
+        <Text color={Colors.green} textAlign="right" fontSize={16} bold mt={2}>
+          View all reviews
+        </Text>
+      </Pressable>
     </Box>
   );
 }

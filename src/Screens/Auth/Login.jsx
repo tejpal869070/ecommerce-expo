@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Center,
+  HStack,
   Image,
   Input,
   Pressable,
@@ -161,11 +162,18 @@ export default function LoginScreen({ navigation }) {
             {loading ? <Spinner size="sm" /> : "LOGIN"}
           </Button>
 
-          <Pressable onPress={() => navigation.navigate("Register")}>
-            <Text textAlign="center" color={Colors.black}>
-              SignUp Now!
-            </Text>
-          </Pressable>
+          <HStack justifyContent="space-between" w="full">
+            <Pressable onPress={() => navigation.navigate("Register")}>
+              <Text fontSize={16} bold textAlign="center" color={Colors.black}>
+                SignUp Now!
+              </Text>
+            </Pressable>
+            <Pressable onPress={() => navigation.navigate("ForgotPassword")}>
+              <Text fontSize={16} bold textAlign="center" color={Colors.black}>
+                Forgot Password.
+              </Text>
+            </Pressable>
+          </HStack>
         </VStack>
       </Box>
     </Box>
