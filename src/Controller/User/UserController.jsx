@@ -315,12 +315,23 @@ export const GetCartDataByIds = async () => {
     email: email,
     ids: ids.map((item) => item.id) || [],
   };
- 
 
   try {
     const response = await axios.post(
       `${api.API_URL}user/get-cart-by-id`,
       formData
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const ForgetPassword = async (formData2) => {
+  try {
+    const response = await axios.post(
+      `${api.API_URL}user/forget-password`,
+      formData2
     );
     return response.data;
   } catch (error) {

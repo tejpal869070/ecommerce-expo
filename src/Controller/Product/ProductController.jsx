@@ -40,7 +40,7 @@ export const GetSubCategory = async () => {
   }
 };
 
-export const GetSubCategoryProducts = async (formData) => { 
+export const GetSubCategoryProducts = async (formData) => {
   try {
     const postData = {
       cat_id: formData.cat_id,
@@ -50,6 +50,27 @@ export const GetSubCategoryProducts = async (formData) => {
       `${api.API_URL}user/get-sub-category-product`,
       postData
     );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const AddProductRating = async (formData) => {
+  const email = await SecureStore.getItemAsync("email");
+  try {
+    const postData = {
+      email: email,
+      rating: formData.rating,
+      product_id: formData.product_id,
+      review: formData.review,
+    };
+
+    const response = await axios.post(
+      `${api.API_URL}user/add-rating`,
+      postData
+    );
+
     return response.data;
   } catch (error) {
     throw error;

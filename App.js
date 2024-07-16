@@ -20,7 +20,7 @@ export default function App() {
       <NavigationContainer>
         <StatusBar hidden={true} />
         <Stack.Navigator
-          initialRouteName="ForgotPassword"
+          initialRouteName="Bottom"
           screenOptions={{
             headerShown: false,
           }}

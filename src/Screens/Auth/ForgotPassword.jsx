@@ -11,10 +11,16 @@ import {
 import React, { useState } from "react";
 import { Colors } from "../../color";
 import { StatusBar } from "expo-status-bar";
-import { OtpVerification, SendOtp } from "../../Controller/User/UserController";
+import {
+  ForgetPassword,
+  OtpVerification,
+  SendOtp,
+} from "../../Controller/User/UserController";
 import { Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ForgotPassword() {
+  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -25,14 +31,21 @@ export default function ForgotPassword() {
   const [token, setToken] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [resetting, setResetting] = useState(false);
+  const [resetError, setResetError] = useState("");
 
   const formData = {
     email: email,
     otp: otp,
   };
 
+  const formData2 = {
+    email: email,
+    password: newPassword,
+    token: token,
+  };
+
   const handleOtpVerify = async () => {
-    console.log(formData);
     setOtpVerifying(true);
     if (email.length < 12) {
       setError("Invalid Email");
@@ -51,7 +64,7 @@ export default function ForgotPassword() {
         setOtpVerifying(false);
         setToken(response.token);
       } else {
-        setError(response.message);
+        setError(response.msg);
         setOtpVerifying(false);
       }
     } catch (error) {
@@ -87,19 +100,43 @@ export default function ForgotPassword() {
   };
 
   const handleResetPassword = async () => {
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
+    setResetting(true);
+    if (newPassword.length < 6) {
+      setResetError("Password must be at least 6 characters long.");
+      setResetting(false);
+      return;
+    } else if (newPassword !== confirmPassword) {
+      setResetError("Passwords do not match");
+      setResetting(false);
       return;
     }
+    setResetError("");
     try {
-      //   const response = await ResetPassword(email, newPassword, token);
-      //   if (response.status) {
-      //     Alert.alert("Password reset successfully");
-      //   } else {
-      //     setError(response.message);
-      //   }
+      const response = await ForgetPassword(formData2);
+      if (response.status) {
+        setResetting(false);
+        Alert.alert(
+          "Success",
+          "Password Reset Successfully..",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "OK",
+              onPress: () => navigation.navigate("Login"),
+            },
+          ],
+          { cancelable: false }
+        );
+      } else {
+        setResetError(response.message);
+        setResetting(false);
+      }
     } catch (error) {
-      setError("Something Went Wrong.");
+      setResetError("Something Went Wrong.");
+      setResetting(false);
     }
   };
 
@@ -184,6 +221,11 @@ export default function ForgotPassword() {
         </VStack>
       ) : (
         <VStack mt={10}>
+          {resetError && (
+            <Text bold color={Colors.red}>
+              {resetError}
+            </Text>
+          )}
           <Input
             variant="rounded"
             placeholder="Enter New Password"
@@ -222,7 +264,11 @@ export default function ForgotPassword() {
             _pressed={{ bg: Colors.green }}
             onPress={() => handleResetPassword()}
           >
-            Reset Password
+            {resetting ? (
+              <Spinner size="sm" color={Colors.white} />
+            ) : (
+              "Reset Password"
+            )}
           </Button>
         </VStack>
       )}

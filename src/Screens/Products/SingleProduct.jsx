@@ -21,7 +21,6 @@ export default function SingleProduct() {
   const getSingleProduct = async (itemId) => {
     const response = await GetProductById(itemId);
     if (response.data[0].length === 0) {
-      console.log("no data found");
       return;
     }
     setSingleData(response.data[0]);
@@ -61,7 +60,7 @@ export default function SingleProduct() {
             productData={singleData}
           />
           <ProductDetails productData={singleData} />
-          <Review ratings={singleData.rating} />
+          <Review ratings={singleData.rating} id={singleData.id} />
           <SimilerProducts similarProducts={singleData.sub_category} />
         </ScrollView>
       )}
