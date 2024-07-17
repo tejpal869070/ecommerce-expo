@@ -1,5 +1,5 @@
 import { Box, Button, Center, HStack, ScrollView, Text } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Colors } from "../../color";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import CartItem2 from "./CartItem2";
@@ -15,18 +15,18 @@ import * as SecureStore from "expo-secure-store";
 export default function CartScreen() {
   const navigation = useNavigation();
   const [productData, setProductData] = useState([]);
-  console.log("screen", productData);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isUser, setIsUser] = useState(false);
+
+  console.log(totalPrice)
 
   const getCartData = async () => {
     try {
       const response = await GetCartDataByIds();
-      console.log("reson", response.data)
       if (response.status) {
         setProductData(response.data);
       } else {
-        setProductData([]); 
+        setProductData([]);
       }
     } catch (error) {
       setProductData([]);
@@ -75,6 +75,10 @@ export default function CartScreen() {
       checkTotalPrice();
     }, [])
   );
+
+  useEffect(() => {
+    checkTotalPrice;
+  }, []);
 
   return (
     <Box safeAreaTop flex={1} bg="#E5FFE1">

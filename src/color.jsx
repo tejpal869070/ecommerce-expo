@@ -1,6 +1,6 @@
 export const Colors = {
-  main: "#488600",
   red: "#FF1717",
+  main: "#488600",
   white: "#FFFFFF",
   main2: "#A7FFCD",
   black: "#000000",

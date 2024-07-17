@@ -10,22 +10,41 @@ import {
   ScrollView,
   Select,
   Button,
+  Spinner,
 } from "native-base";
 import { Colors } from "../../color";
 import { AntDesign, Entypo } from "@expo/vector-icons";
-import { GetUserDetails } from "../../Controller/User/UserController";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
+import {
+  GetCartDataByIds,
+  GetUserDetails,
+  PlaceOrder,
+} from "../../Controller/User/UserController";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import AddAddress from "../../Componentes/User/AddAddress";
+import * as SecureStore from "expo-secure-store";
+import { Alert } from "react-native";
 
 export default function CheckOutScreen() {
+  const navigation = useNavigation();
   const params = useRoute();
-  const { totalPrice } = params.params; 
+  const { totalPrice } = params.params;
   const [selectedPayment, setSelectedPayment] = useState(0);
   const [isAddressPopup, setIsAddressPopup] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedAddress, setSelectedAddress] = useState(0);
   const [userDetails, setUserData] = useState({});
   const [addressData, setAddress] = useState([]);
+  const [items, setItems] = useState([]);
+
+  const [ordring, setOrdring] = useState(false);
+
+  const [orderSuccess, setOrderSuccess] = useState(false);
+
+  const [cartProducts, setCartproducts] = useState([]);
 
   const changePaymentMethod = (index) => {
     setSelectedPayment(index);
@@ -55,9 +74,68 @@ export default function CheckOutScreen() {
     getUserDetails();
   };
 
+  const getCartData = async () => {
+    try {
+      const response = await GetCartDataByIds();
+      if (response.status) {
+        const arr = [];
+        const cartDataFromLocal = await SecureStore.getItemAsync("cartData");
+        if (cartDataFromLocal) {
+          const cartData = JSON.parse(cartDataFromLocal);
+          for (let i = 0; i < cartData.length; i++) {
+            const singleData = response.data.find(
+              (item) => item.cart_id === cartData[i].id
+            );
+            if (singleData) {
+              const newObj = {
+                product_id: singleData.product_id,
+                size: singleData.size,
+                qty: cartData[i].qty,
+                color: singleData.color,
+              };
+              arr.push(newObj);
+            }
+          }
+          setItems(arr);
+        }
+      } else {
+        setCartproducts([]);
+      }
+    } catch (error) {
+      setCartproducts([]);
+    }
+  };
+
+  const formData = {
+    payment_type: ShippingInputs[selectedPayment].type,
+    address: addressData[selectedAddress],
+    items: items,
+  };
+
+  const handleOrder = async () => {
+    setOrdring(true);
+    try {
+      const response = await PlaceOrder(formData);
+      if (response.status) {
+        setOrderSuccess(true);
+        setOrdring(false);
+        await SecureStore.deleteItemAsync("cartData");
+        navigation.navigate("OrderConfirm");
+      } else {
+        Alert.alert("Something Went Wrong.");
+        setOrdring(false);
+      }
+    } catch (error) {
+      Alert.alert("Some of your items are out of stock.");
+      console.log("error", error);
+      setOrdring(false);
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       getUserDetails();
+      getCartData();
     }, [])
   );
 
@@ -80,7 +158,7 @@ export default function CheckOutScreen() {
           shadow={4}
           justifyContent="space-between"
         >
-          {addressData.length === 0 ? (
+          {addressData && addressData.length === 0 ? (
             <Pressable onPress={() => openAddressPopup()}>
               <HStack justifyContent="center" alignItems="center" space={2}>
                 <Text bold fontSize={17} color={Colors.main}>
@@ -99,11 +177,12 @@ export default function CheckOutScreen() {
                   M.No.: {addressData && addressData[selectedAddress].phone}
                 </Text>
                 <Text fontWeight="semibold" color={Colors.lightBlack}>
-                  {addressData && addressData[selectedAddress].street}{" "}
-                  {addressData && addressData[selectedAddress].city}{" "}
-                  {addressData && addressData[selectedAddress].state}{" "}
-                  {addressData && addressData[selectedAddress].country}{" "}
-                  {addressData && addressData[selectedAddress].pincode}{" "}
+                  {addressData &&
+                    `${addressData[selectedAddress].street} 
+                      ${addressData[selectedAddress].city} 
+                      ${addressData[selectedAddress].state} 
+                      ${addressData[selectedAddress].country} 
+                      ${addressData[selectedAddress].pincode}`}
                 </Text>
               </VStack>
               <Select
@@ -234,8 +313,9 @@ export default function CheckOutScreen() {
             fontSize={18}
             bold
             color={Colors.green}
+            onPress={() => handleOrder()}
           >
-            ORDER
+            {ordring ? <Spinner color={Colors.white} size="sm" /> : "ORDER NOW"}
           </Button>
         </Box>
       </Box>

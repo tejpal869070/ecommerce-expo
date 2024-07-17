@@ -247,14 +247,16 @@ export const GetUserOrders = async (id) => {
 };
 
 export const PlaceOrder = async (formData) => {
-  console.log("order", formData);
   const email = await SecureStore.getItemAsync("email");
   try {
     const postData = {
       email: email,
-      items: [...formData],
+      items: [...formData.items],
+      payment_type: formData.payment_type,
+      address: formData.address,
     };
-    const response = axios.post(`${api.API_URL}user/add-order`, postData);
+    console.log(postData);
+    const response = await axios.post(`${api.API_URL}user/add-order`, postData);
     return response.data;
   } catch (error) {
     throw error;

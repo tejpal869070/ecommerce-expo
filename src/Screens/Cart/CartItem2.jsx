@@ -54,6 +54,7 @@ export default function CartItem2({ isZero, productData }) {
   useFocusEffect(
     React.useCallback(() => {
       getLocalCartData();
+      isZero()
     }, [])
   );
 

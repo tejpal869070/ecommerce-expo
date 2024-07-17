@@ -17,14 +17,18 @@ import { Colors } from "../../color";
 import { FontAwesome } from "@expo/vector-icons";
 import { AddProductRating } from "../../Controller/Product/ProductController";
 import { Alert } from "react-native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { GetUserDetails } from "../../Controller/User/UserController";
 
 export default function Review({ ratings, id }) {
+  const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
   const [ratingModal, setRatingModal] = useState(false);
   const [review, setReview] = useState("");
   const [value, setValue] = useState(4);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [user, setUser] = useState(false);
 
   const handleRatingChange = (value) => {
     setValue(value);
@@ -48,6 +52,8 @@ export default function Review({ ratings, id }) {
       const response = await AddProductRating(formData);
       if (response.status) {
         setLoading(false);
+        setReview("");
+        setValue(4);
         Alert.alert(
           "Success",
           "Thanks for Sharing Product Review.",
@@ -72,6 +78,22 @@ export default function Review({ ratings, id }) {
       setError("Something went wrong, please try again later");
     }
   };
+
+  const getUserDetails = async () => {
+    const response = await GetUserDetails();
+    if (response.data.length < 1) {
+      alert("Something went wrong.");
+      navigation.navigate("Login");
+    } else {
+      setUser(true);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getUserDetails(true);
+    }, [])
+  );
 
   return (
     <Box mt={3} bg={Colors.white} py={3} mx={1} rounded={5} shadow={4}>
@@ -179,7 +201,7 @@ export default function Review({ ratings, id }) {
         style={{ marginBottom: 0, marginTop: "auto" }}
       >
         <Modal.Content maxWidth="100%" maxHeight="100vh">
-          <Modal.Body h={600}>
+          <Modal.Body h={400}>
             <Text textAlign="center" fontSize={18} fontWeight="semibold">
               Rating
             </Text>
@@ -203,25 +225,38 @@ export default function Review({ ratings, id }) {
             <Text textAlign="center" mt={6} fontSize={18} fontWeight="semibold">
               Write Product Review
             </Text>
+            {error && <Text color={Colors.red}>{error}</Text>}
             <TextArea
               onChangeText={(value) => setReview(value)}
               h={40}
               w="full"
               mt={1}
             />
-            <Button
-              mt={4}
-              bg={Colors.green}
-              _text={{ fontWeight: "bold", fontSize: "16px" }}
-              _pressed={{ bg: Colors.main }}
-              onPress={() => handleSubmit()}
-            >
-              {loading ? (
-                <Spinner size="sm" color={Colors.white} />
-              ) : (
-                "Submit Review"
-              )}
-            </Button>
+            {user ? (
+              <Button
+                mt={4}
+                bg={Colors.green}
+                _text={{ fontWeight: "bold", fontSize: "16px" }}
+                _pressed={{ bg: Colors.main }}
+                onPress={() => handleSubmit()}
+              >
+                {loading ? (
+                  <Spinner size="sm" color={Colors.white} />
+                ) : (
+                  "Submit Review"
+                )}
+              </Button>
+            ) : (
+              <Button
+                mt={4}
+                bg={Colors.green}
+                _text={{ fontWeight: "bold", fontSize: "16px" }}
+                _pressed={{ bg: Colors.main }}
+                onPress={() => navigation.navigate("Login")}
+              >
+                Login to add Review
+              </Button>
+            )}
           </Modal.Body>
           <Modal.Footer>
             <Pressable onPress={() => setRatingModal(false)}>
