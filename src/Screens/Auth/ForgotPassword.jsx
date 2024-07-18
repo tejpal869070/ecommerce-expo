@@ -87,8 +87,7 @@ export default function ForgotPassword() {
         setOtpSent(true);
         setTimeout(() => {
           setOtpSent(false);
-        }, 1500);
-        console.log("otp sent successfully");
+        }, 1500); 
       } else {
         setOptSending(false);
         Alert.alert("Something Went Wrong.");

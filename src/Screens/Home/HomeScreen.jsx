@@ -1,6 +1,5 @@
 import { Box, ScrollView } from "native-base";
-import React, { useEffect, useState } from "react";
-import { Colors } from "../../color";
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import SearchBox from "../../Componentes/Home/SearchBox";
 import { RefreshControl } from "react-native";
@@ -8,21 +7,18 @@ import Categories from "../../Componentes/Home/Categories";
 import ImageSlider from "../../Componentes/ImageSlider";
 import banner1 from "../../Assets/Images/banner1.jpg";
 import banner2 from "../../Assets/Images/banner2.jpg";
-import HomeProducts from "../../Componentes/Home/HomeProducts";
 import Trendings from "../Products/Trendings";
 import MensSection from "../Products/MensSection";
 import { GetAllProducts } from "../../Controller/Product/ProductController";
 import mensBanner from "../../Assets/Images/mensSection.jpg";
 import womensBanner from "../../Assets/Images/womensSection.jpg";
 import { useFocusEffect } from "@react-navigation/native";
-import * as SecureStore from "expo-secure-store";
 import { SetCartDataToLocal } from "../../Controller/User/UserController";
 
 const sliderImages = [banner1, banner2];
 
 export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
-  const [products, setProducts] = useState([]);
   const [mensProduct, setMensProducts] = useState([]);
   const [womensProducts, setWomensProducts] = useState([]);
 
@@ -37,7 +33,6 @@ export default function HomeScreen() {
   //Get all products
   const getProducts = async () => {
     const response = await GetAllProducts();
-    setProducts(response.data);
     setMensProducts(
       response.data
         .filter((obj) => obj.sub_category === "Mens")

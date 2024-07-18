@@ -31,7 +31,7 @@ export default function SearchBox() {
         setLoading(false);
       }
     } catch (error) {
-      console.log("error", error);
+      throw error
     }
   };
 

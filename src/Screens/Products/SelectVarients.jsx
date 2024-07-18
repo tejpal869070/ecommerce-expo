@@ -126,7 +126,7 @@ export default function SelectVarients({ visible, onClose, productData }) {
         toast.show({ title: "Added", placement: "top" });
       }
     } catch (error) {
-      console.log("eror", error);
+      throw error
     } finally {
       setAddingCart(false);
     }

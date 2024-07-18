@@ -79,8 +79,7 @@ export default function RegisterScreen({ navigation }) {
         setFormError("User already exists");
         setLoading(false);
       }
-    } catch (error) {
-      console.log("error", error);
+    } catch (error) { 
       setFormError(error.response.data.message || "Server error !");
       setLoading(false);
     }

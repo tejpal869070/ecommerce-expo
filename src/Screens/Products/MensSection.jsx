@@ -11,7 +11,6 @@ import {
 import React from "react";
 import { Colors } from "../../color";
 import { api } from "../../Config/api";
-import cartImg from "../../Assets/Images/cart.png";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
@@ -32,7 +31,7 @@ export default function MensSection({ products, banner, womens }) {
       <Flex
         flexDirection="row"
         flexWrap="wrap"
-        justifyContent="space-between" 
+        justifyContent="space-between"
         style={{ gap: 6 }}
         mx={2}
         mt={4}
@@ -46,12 +45,16 @@ export default function MensSection({ products, banner, womens }) {
               key={index}
               shadow={2}
               roundedBottom={10}
-              roundedLeft={10} 
+              roundedLeft={10}
               roundedTop={10}
               roundedRight={10}
               onPress={() => navigation.navigate("Single", { itemId: item.id })}
             >
-              <Box bg={womens ? Colors.lightPink : Colors.lightSkyBlue} rounded={10} px={2}>
+              <Box
+                bg={womens ? Colors.lightPink : Colors.lightSkyBlue}
+                rounded={10}
+                px={2}
+              >
                 <VStack px={1} py={2}>
                   <Image
                     alt="prod"
@@ -100,7 +103,7 @@ export default function MensSection({ products, banner, womens }) {
           <Pressable
             w="47%"
             rounded={4}
-            mb={2}  
+            mb={2}
             roundedBottom={10}
             roundedLeft={10}
             roundedTop={10}

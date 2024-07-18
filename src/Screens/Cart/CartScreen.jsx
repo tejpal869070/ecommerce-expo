@@ -17,8 +17,7 @@ export default function CartScreen() {
   const [productData, setProductData] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isUser, setIsUser] = useState(false);
-
-  console.log(totalPrice)
+ 
 
   const getCartData = async () => {
     try {

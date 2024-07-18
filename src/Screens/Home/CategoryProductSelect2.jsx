@@ -21,15 +21,14 @@ export default function CategoryProductSelect2({ selectedCategory, cat_id }) {
 
   const getSubCat = async () => {
     try {
-      const response = await GetSubCategory();
-      console.log(response)
+      const response = await GetSubCategory(); 
       if (response.status) {
         setSubCategory(
           response.data.filter((item) => item.cat_name == selectedCategory)
         );
       }
     } catch (error) {
-      console.log("error", error);
+      throw error
     }
   };
 

@@ -26,7 +26,7 @@ export default function UserOrdersList() {
         setOrders(response.data);
       }
     } catch (error) {
-      console.log(error);
+      throw error
     }
     
   };

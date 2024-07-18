@@ -131,8 +131,7 @@ export default function ShowAddress() {
           { cancelable: false }
         );
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error) { 
       setLoading(false);
     }
   };
@@ -155,7 +154,7 @@ export default function ShowAddress() {
         );
       }
     } catch (error) {
-      console.log(error);
+      throw error
     }
   };
 

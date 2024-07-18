@@ -30,8 +30,7 @@ export default function SubCategoryProducts() {
   const params = useRoute();
   const { cat_id, sub_cat_id } = params.params;
   const [products, setProducts] = useState([]);
-  const [filterType, setFilterType] = useState("");
-  console.log("PROJECT", products);
+  const [filterType, setFilterType] = useState(""); 
 
   const handleFilter = async (itemValue) => {
     setFilterType(itemValue);
@@ -48,8 +47,7 @@ export default function SubCategoryProducts() {
           b.sizeDetails[0].regular_price - a.sizeDetails[0].regular_price
       );
     }
-
-    console.log("filter", filterProducts);
+ 
     setProducts(filterProducts);
   };
 
@@ -63,12 +61,11 @@ export default function SubCategoryProducts() {
       const response = await GetSubCategoryProducts(formData);
       if (response.status) {
         // setProducts(response.data);
-        const data = response.data.map((item) => item.colorDetails).flat();
-        console.log(data);
+        const data = response.data.map((item) => item.colorDetails).flat(); 
         setProducts(data);
       }
     } catch (error) {
-      console.log(error);
+      throw error
     }
   };
 

@@ -135,11 +135,9 @@ export const ChangeUserPassword = async (formData) => {
       `${api.API_URL}user/change-password`,
       postData,
       axiosConfig
-    );
-    console.log(response);
+    ); 
     return response.data;
-  } catch (error) {
-    console.log(error);
+  } catch (error) { 
     throw error;
   }
 };
@@ -254,8 +252,7 @@ export const PlaceOrder = async (formData) => {
       items: [...formData.items],
       payment_type: formData.payment_type,
       address: formData.address,
-    };
-    console.log(postData);
+    }; 
     const response = await axios.post(`${api.API_URL}user/add-order`, postData);
     return response.data;
   } catch (error) {
@@ -302,7 +299,7 @@ export const SetCartDataToLocal = async () => {
       const ids = response.data.map((item) => ({ id: item.cart_id, qty: 1 }));
       await SecureStore.setItemAsync("cartData", JSON.stringify(ids));
     } catch (error) {
-      console.log(error);
+      throw error
     }
   }
 };

@@ -86,8 +86,7 @@ export default function AddAddress({ newAddressPopup, openAddNewPopup }) {
           { cancelable: false }
         );
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error) { 
       setLoading(false);
     }
   };

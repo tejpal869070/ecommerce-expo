@@ -11,18 +11,15 @@ import {
   VStack,
 } from "native-base";
 import React, { useState } from "react";
-import { Colors } from "../../color";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Colors } from "../../color"; 
 import { Entypo } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import * as SecureStore from "expo-secure-store";
-import {
-  CartData,
+import { 
   SetCartDataToLocal,
   userLogin,
 } from "../../Controller/User/UserController";
-import PageLoader from "../../Componentes/Loadings/PageLoader";
-
+ 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

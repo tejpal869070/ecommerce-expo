@@ -17,15 +17,13 @@ import { CartData, CartRemove } from "../../Controller/User/UserController";
 import { useFocusEffect } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 
-export default function CartItem2({ isZero, productData }) {
-  console.log("prodata cart2", productData);
+export default function CartItem2({ isZero, productData }) { 
   const toast = useToast();
   const [cartData, setCartData] = useState();
 
   const handleRemove = async (id) => {
     try {
-      const response = await CartRemove(id);
-      console.log(id)
+      const response = await CartRemove(id); 
       if (response.status) {
         const previousData = await SecureStore.getItemAsync("cartData");
         const data = previousData ? JSON.parse(previousData) : [];

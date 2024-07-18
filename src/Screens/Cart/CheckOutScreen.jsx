@@ -126,8 +126,7 @@ export default function CheckOutScreen() {
         setOrdring(false);
       }
     } catch (error) {
-      Alert.alert("Some of your items are out of stock.");
-      console.log("error", error);
+      Alert.alert("Some of your items are out of stock."); 
       setOrdring(false);
     }
   };
@@ -177,12 +176,11 @@ export default function CheckOutScreen() {
                   M.No.: {addressData && addressData[selectedAddress].phone}
                 </Text>
                 <Text fontWeight="semibold" color={Colors.lightBlack}>
-                  {addressData &&
-                    `${addressData[selectedAddress].street} 
-                      ${addressData[selectedAddress].city} 
-                      ${addressData[selectedAddress].state} 
-                      ${addressData[selectedAddress].country} 
-                      ${addressData[selectedAddress].pincode}`}
+                  {addressData && addressData[selectedAddress].street}{" "}
+                  {addressData && addressData[selectedAddress].city}{" "}
+                  {addressData && addressData[selectedAddress].state}{" "}
+                  {addressData && addressData[selectedAddress].country}{" "}
+                  {addressData && addressData[selectedAddress].pincode}{" "}
                 </Text>
               </VStack>
               <Select

@@ -75,7 +75,6 @@ export default function VerifyOtp({ navigation }) {
         userData.token = response.token;
         try {
           const registerResponse = await userRegistration(userData);
-          console.log(registerResponse);
           if (registerResponse.status === true) {
             setError("");
             setVerifying(false);

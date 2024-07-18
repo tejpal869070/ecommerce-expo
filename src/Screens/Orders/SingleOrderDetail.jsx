@@ -16,8 +16,7 @@ import { useRoute } from "@react-navigation/native";
 
 export default function SingleOrderDetail() {
   const route = useRoute();
-  const { data } = route.params;
-  console.log(data);
+  const { data } = route.params; 
   return (
     <Box showsVerticalScrollIndicator={false} bg={Colors.lightWhite}>
       <ScrollView showsVerticalScrollIndicator={false}>
