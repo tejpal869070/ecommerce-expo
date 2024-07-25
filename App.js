@@ -11,6 +11,7 @@ import SearchedProducts from "./src/Screens/Products/SearchedProducts";
 import RegisterScreen from "./src/Screens/Auth/Register";
 import VerifyOtp from "./src/Screens/Auth/VerifyOtp";
 import ForgotPassword from "./src/Screens/Auth/ForgotPassword";
+import Preload from "./src/Screens/Home/Preload";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,11 +21,12 @@ export default function App() {
       <NavigationContainer>
         <StatusBar hidden={true} />
         <Stack.Navigator
-          initialRouteName="Bottom"
+          initialRouteName="Preload"
           screenOptions={{
             headerShown: false,
           }}
         >
+          <Stack.Screen name="Preload" component={Preload} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="OtpVerify" component={VerifyOtp} />
           <Stack.Screen name="Register" component={RegisterScreen} />

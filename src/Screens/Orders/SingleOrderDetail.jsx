@@ -16,7 +16,7 @@ import { useRoute } from "@react-navigation/native";
 
 export default function SingleOrderDetail() {
   const route = useRoute();
-  const { data } = route.params; 
+  const { data } = route.params;
   return (
     <Box showsVerticalScrollIndicator={false} bg={Colors.lightWhite}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -26,7 +26,7 @@ export default function SingleOrderDetail() {
           borderBottomWidth={0.5}
           borderBottomColor={Colors.lightBlack}
         >
-          <Text color={Colors.lightBlack}>Order ID:- OD4551ECD4100</Text>
+          <Text color={Colors.lightBlack}>Order ID:- {data.order_id}</Text>
         </Box>
         <HStack
           w="full"
@@ -84,7 +84,7 @@ export default function SingleOrderDetail() {
         </VStack>
 
         {/*invoice details*/}
-        <Pressable>
+        {/* <Pressable>
           <HStack
             justifyContent="space-between"
             alignItems="center"
@@ -102,7 +102,7 @@ export default function SingleOrderDetail() {
             </HStack>
             <AntDesign name="right" size={18} color="black" />
           </HStack>
-        </Pressable>
+        </Pressable> */}
 
         {/*Shipping details*/}
         <VStack
@@ -158,19 +158,21 @@ export default function SingleOrderDetail() {
           <VStack px={3} space={3}>
             <HStack justifyContent="space-between">
               <Text>Regular Price</Text>
-              <Text>₹{data.colorDetails[0].sizeDetails[0].regular_price}</Text>
+              <Text>₹{data.colorDetails[0].sizeDetails[0].regular_price + 40}</Text>
             </HStack>
             <HStack justifyContent="space-between">
               <Text>Selling Price</Text>
-              <Text>₹310</Text>
+              <Text>
+                ₹{data.colorDetails[0].sizeDetails[0].regular_price}
+              </Text>
             </HStack>
             <HStack justifyContent="space-between">
               <Text>Extra Discount</Text>
-              <Text color={Colors.green}>-₹20</Text>
+              <Text color={Colors.green}>-₹40</Text>
             </HStack>
             <HStack justifyContent="space-between">
               <Text>Delivery Charges</Text>
-              <Text>₹40</Text>
+              <Text>+₹40</Text>
             </HStack>
             <HStack
               justifyContent="space-between"
@@ -181,7 +183,7 @@ export default function SingleOrderDetail() {
                 Total Amount
               </Text>
               <Text fontSize={16} fontWeight="semibold" color={Colors.green}>
-                ₹330
+                ₹{data.colorDetails[0].sizeDetails[0].regular_price}
               </Text>
             </HStack>
           </VStack>
@@ -197,7 +199,7 @@ export default function SingleOrderDetail() {
           shadow={4}
           mt={1}
         >
-          <Text>Paid via UPI: 8690708302@upi</Text>
+          <Text>Paid via {data.payment_type}</Text>
         </Box>
         <Box h={10} w="full"></Box>
       </ScrollView>

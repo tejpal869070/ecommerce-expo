@@ -8,7 +8,7 @@ import { Entypo } from "@expo/vector-icons";
 
 export default function ProductDetails({ productData }) {
   return (
-    <Box mt={2} color={Colors.lightBlack}>
+    <Box mt={2}  >
       <Heading px={2} fontSize={18} mb={1}>
         {productData.name}
       </Heading>
@@ -42,7 +42,7 @@ export default function ProductDetails({ productData }) {
         />
       </HStack>
 
-      <AvailableSize productData={productData} />
+      {/* <AvailableSize productData={productData} /> */}
       <Policies />
 
       {/*Specifications */}

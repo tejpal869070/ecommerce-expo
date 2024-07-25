@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "expopract",
+    "name": "ecommerce",
     "slug": "expopract",
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "orientation": "portrait", 
+    "icon": "./assets/iconss.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/homegif.gif",
+      "image": "./assets/iconss.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.tejpalsoni08.expopract"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8a9949e3-349d-4f72-83fa-dbe0790ca082"
+      }
     }
   }
 }

@@ -47,7 +47,7 @@ export default function SingleProduct() {
   }, [itemId]);
 
   return (
-    <Box flex={1} safeAreaTop bg={Colors.lightWhite}>
+    <Box flex={1} safeAreaTop  >
       <StatusBar hidden={false} style="dark" />
 
       {loading ? (

@@ -1,10 +1,23 @@
 import { Box, Button, Center, Image, Text } from "native-base";
-import React from "react";
+import React, { useEffect } from "react";
 import { Colors } from "../../color";
 import { StatusBar } from "expo-status-bar";
 import gif1 from "../../Assets/Images/verified.gif";
+import { BackHandler } from "react-native";
 
 export default function OrderConfirm({ navigation }) {
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        navigation.navigate("Bottom");
+        return true;
+      }
+    );
+
+    return () => backHandler.remove();
+  }, [navigation]);
+
   return (
     <Box flex={1} safeAreaTop bg={Colors.lightWhite}>
       <StatusBar style="dark" hidden={false} />
@@ -26,7 +39,7 @@ export default function OrderConfirm({ navigation }) {
           mt={10}
           w="80%"
           bg={Colors.main}
-          shadow={6}
+          shadow={6}      
           _pressed={{ bg: Colors.main }}
           borderWidth={3}
           borderColor={Colors.white}
