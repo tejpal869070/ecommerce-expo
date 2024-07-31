@@ -65,7 +65,7 @@ export default function RegisterScreen({ navigation }) {
       if (checkExistance.status) {
         const otpSendFunction = await SendOtp(userData.email);
         if (otpSendFunction.status) {
-          setLoading(false)
+          setLoading(false);
           setEmail("");
           setPassword("");
           setMobile("");
@@ -79,7 +79,7 @@ export default function RegisterScreen({ navigation }) {
         setFormError("User already exists");
         setLoading(false);
       }
-    } catch (error) { 
+    } catch (error) {
       setFormError(error.response.data.message || "Server error !");
       setLoading(false);
     }
@@ -122,7 +122,12 @@ export default function RegisterScreen({ navigation }) {
             variant="rounded"
             placeholder="username"
             pl={3}
-            borderWidth={2.5}
+            borderWidth={2}
+            shadow={2}
+            _focus={{
+              bg: Colors.white,
+            }}
+            bg={Colors.white}
             borderColor={Colors.lightGreen}
             focusOutlineColor={Colors.lightGreen}
             fontSize={18}
@@ -135,7 +140,12 @@ export default function RegisterScreen({ navigation }) {
             variant="rounded"
             placeholder="user@gmail.com"
             pl={3}
-            borderWidth={2.5}
+            borderWidth={2}
+            shadow={2}
+            _focus={{
+              bg: Colors.white,
+            }}
+            bg={Colors.white}
             borderColor={Colors.lightGreen}
             focusOutlineColor={Colors.lightGreen}
             fontSize={18}
@@ -149,7 +159,12 @@ export default function RegisterScreen({ navigation }) {
             variant="rounded"
             placeholder="+91**********"
             pl={3}
-            borderWidth={2.5}
+            borderWidth={2}
+            shadow={2}
+            _focus={{
+              bg: Colors.white,
+            }}
+            bg={Colors.white}
             borderColor={Colors.lightGreen}
             focusOutlineColor={Colors.lightGreen}
             fontSize={18}
@@ -172,7 +187,12 @@ export default function RegisterScreen({ navigation }) {
             placeholder="******"
             type={showPass ? `text` : "password"}
             pl={3}
-            borderWidth={2.5}
+            borderWidth={2}
+            shadow={2}
+            _focus={{
+              bg: Colors.white,
+            }}
+            bg={Colors.white}
             borderColor={Colors.lightGreen}
             focusOutlineColor={Colors.lightGreen}
             fontSize={18}
@@ -198,13 +218,12 @@ export default function RegisterScreen({ navigation }) {
             onPress={handleRegister}
             disabled={loading}
           >
-            {loading ? <Spinner size="sm" color={Colors.black} /> : "Register"}
-
+            {loading ? <Spinner size="sm" color={Colors.black} /> : "SIGN-UP"}
           </Button>
 
           <Pressable onPress={() => navigation.navigate("Login")}>
             <Text color={Colors.black} textAlign="center">
-              Login !{" "}
+              LOGIN !{" "}
             </Text>
           </Pressable>
         </VStack>

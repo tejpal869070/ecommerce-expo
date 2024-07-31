@@ -85,7 +85,7 @@ export default function ForgotPassword() {
       if (response.status) {
         setOptSending(false);
         setOtpSent(true);
-        setTimeout(() => {
+        setTimeout(() => {  
           setOtpSent(false);
         }, 1500); 
       } else {
@@ -98,7 +98,7 @@ export default function ForgotPassword() {
     }
   };
 
-  const handleResetPassword = async () => {
+  const handleResetPassword = async () => { 
     setResetting(true);
     if (newPassword.length < 6) {
       setResetError("Password must be at least 6 characters long.");
@@ -269,7 +269,7 @@ export default function ForgotPassword() {
               "Reset Password"
             )}
           </Button>
-        </VStack>
+        </VStack> 
       )}
     </Box>
   );

@@ -12,6 +12,7 @@ import RegisterScreen from "./src/Screens/Auth/Register";
 import VerifyOtp from "./src/Screens/Auth/VerifyOtp";
 import ForgotPassword from "./src/Screens/Auth/ForgotPassword";
 import Preload from "./src/Screens/Home/Preload";
+import UnlockScreen from "./src/Screens/Auth/UnlockScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,7 @@ export default function App() {
           <Stack.Screen name="Single" component={SingleProduct} />
           <Stack.Screen name="Searched" component={SearchedProducts} />
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+          <Stack.Screen name="UnlockScreen" component={UnlockScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

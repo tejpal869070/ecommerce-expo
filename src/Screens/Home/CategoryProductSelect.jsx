@@ -16,9 +16,9 @@ import { api } from "../../Config/api";
 import CategoryProductSelect2 from "./CategoryProductSelect2";
 import { GetProductCategories } from "../../Controller/Product/ProductController";
 import { useFocusEffect } from "@react-navigation/native";
+import kangaru from "../../Assets/Images/kangaru-loading.gif";
 
 export default function CategoryProductSelect() {
-   
   const [selectIndex, setSelectIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
@@ -35,16 +35,30 @@ export default function CategoryProductSelect() {
         setLoading(false);
       }
     } catch (error) {
-      throw error
+      throw error;
     }
   };
 
   useFocusEffect(
     React.useCallback(() => {
       getCategoriesData();
-      setSelectIndex(0)
+      setSelectIndex(0);
     }, [])
   );
+
+  if (loading) {
+    return (
+      <Box
+        flex={1}
+        justifyContent="center"
+        alignItems="center"
+        bg={Colors.lightGreen}
+      >
+        <StatusBar hidden={false} style="dark" />
+        <Image h={40} w={40} alt="loading" source={kangaru} />
+      </Box>
+    );
+  }
 
   return (
     <Flex

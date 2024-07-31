@@ -65,7 +65,7 @@ export default function VerifyOtp({ navigation }) {
   const handleVerifyOTP = async () => {
     setVerifying(true);
     if (otp.length !== 4) {
-      setError("Please enter valid OTP.");
+      setError("Please enter valid OTP");
       setVerifying(false);
       return;
     }
@@ -93,15 +93,15 @@ export default function VerifyOtp({ navigation }) {
               { cancelable: false }
             );
           } else {
-            setError("Something went wrong.");
+            setError("Something went wrong");
             setVerifying(false);
           }
         } catch (error) {
-          setError("Something went wrong.");
+          setError("Something went wrong");
           setVerifying(false);
         }
       } else {
-        setError("Invalid OTP.");
+        setError("Invalid OTP");
         setVerifying(false);
       }
     } catch (error) {
@@ -138,7 +138,7 @@ export default function VerifyOtp({ navigation }) {
             {otpSending ? (
               <Spinner size="sm" />
             ) : isOtpSent ? (
-              "OTP sent."
+              "OTP sent"
             ) : (
               "Resend OTP"
             )}

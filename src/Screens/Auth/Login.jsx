@@ -11,15 +11,15 @@ import {
   VStack,
 } from "native-base";
 import React, { useState } from "react";
-import { Colors } from "../../color"; 
+import { Colors } from "../../color";
 import { Entypo } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import * as SecureStore from "expo-secure-store";
-import { 
+import {
   SetCartDataToLocal,
   userLogin,
 } from "../../Controller/User/UserController";
- 
+
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,7 +53,8 @@ export default function LoginScreen({ navigation }) {
       const response = await userLogin(userData);
 
       await SecureStore.setItemAsync("token", response.token);
-      await SecureStore.setItemAsync("email", response.email);
+      await SecureStore.setItemAsync("email", response.email); 
+      await SecureStore.setItemAsync("name", response.username)
       SetCartDataToLocal();
       setEmail("");
       setPassword("");
@@ -111,6 +112,7 @@ export default function LoginScreen({ navigation }) {
             pl={3}
             fontSize={18}
             borderColor={Colors.lightGreen}
+            bg={Colors.white}
             borderWidth={2.5}
             focusOutlineColor={Colors.lightGreen}
             color={Colors.black}
@@ -134,6 +136,7 @@ export default function LoginScreen({ navigation }) {
             pl={4}
             fontSize={18}
             borderColor={Colors.lightGreen}
+            bg={Colors.white}
             borderWidth={2.5}
             focusOutlineColor={Colors.lightGreen}
             color={Colors.black}
